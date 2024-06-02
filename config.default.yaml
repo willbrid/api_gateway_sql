@@ -1,0 +1,32 @@
+db_api_sql:
+  timeout: 10s
+  databases:
+  - name: datasource1
+    type: mariadb
+    host: 127.0.0.1
+    port: 3306
+    username: "test"
+    password: "test"
+    dbname: test
+    sslmode: false
+  - name: datasource2
+    type: mysql
+    host: 127.0.0.1
+    port: 3306
+    username: "test"
+    password: "test"
+    dbname: test
+    sslmode: false
+  - name: datasource3
+    type: postgresql
+    host: 127.0.0.1
+    port: 3306
+    username: "test"
+    password: "test"
+    dbname: test
+    sslmode: false
+  targets:
+  - name: 
+    data_source_name: datasource1
+    datefields: ""
+    sql: "select * from student"
