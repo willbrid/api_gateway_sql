@@ -26,7 +26,7 @@ db_api_sql:
     dbname: test
     sslmode: false
   targets:
-  - name: 
+  - name: list-student
     data_source_name: datasource1
-    datefields: ""
+    datafields: ""
     sql: "select * from student"
