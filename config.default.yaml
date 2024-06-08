@@ -1,5 +1,9 @@
 db_api_sql:
   timeout: 10s
+  auth:
+    enabled: true
+    username: test
+    password: test@test
   databases:
   - name: datasource1
     type: mariadb
