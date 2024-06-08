@@ -14,7 +14,7 @@ type Database struct {
 	Name     string `mapstructure:"name" validate:"required,max=25"`
 	Type     string `mapstructure:"type" validate:"required,oneof=mysql mariadb postgresql mongodb"`
 	Host     string `mapstructure:"host" validate:"required,ipv4"`
-	Port     int    `mapstructure:"port" validate:"required"`
+	Port     int    `mapstructure:"port" validate:"required,min=1024,max=49151"`
 	Username string `mapstructure:"username" validate:"required"`
 	Password string `mapstructure:"password" validate:"required"`
 	Dbname   string `mapstructure:"dbname" validate:"required"`
