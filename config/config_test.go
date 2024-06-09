@@ -345,3 +345,154 @@ db_api_sql:
 		})
 	}
 }
+
+func TestTargetsField(t *testing.T) {
+	configSlices := []string{
+		`---
+db_api_sql:
+  timeout: "10s"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: 3306
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    sslmode: false
+`,
+		`---
+db_api_sql:
+  timeout: "10s"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: 3306
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    sslmode: false
+  targets:
+`,
+		`---
+db_api_sql:
+  timeout: "10s"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: 3306
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    sslmode: false
+  targets:
+  - name: ""
+`,
+		`---
+db_api_sql:
+  timeout: "10s"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: 3306
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    sslmode: false
+  targets:
+  - name: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+`,
+		`---
+db_api_sql:
+  timeout: "10s"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: 3306
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    sslmode: false
+  targets:
+  - name: "xxxxx"
+    data_source_name: ""
+`,
+		`---
+db_api_sql:
+  timeout: "10s"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: 3306
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    sslmode: false
+  targets:
+  - name: "xxxxx"
+    data_source_name: "xxxxx"
+    datafields: ""
+    sql: ""
+`,
+	}
+
+	expectations := []string{
+		"validation failed on field 'Targets' for condition 'gt'",
+		"validation failed on field 'Targets' for condition 'gt'",
+		"validation failed on field 'Name' for condition 'required'",
+		"validation failed on field 'Name' for condition 'max'",
+		"validation failed on field 'DataSourceName' for condition 'required'",
+		"validation failed on field 'SqlQuery' for condition 'required'",
+	}
+
+	for index, configContent := range configSlices {
+		t.Run(fmt.Sprintf("LoadConfig #%v", index), func(subT *testing.T) {
+			filename, err := utils.CreateConfigFileForTesting(configContent)
+			if err != nil {
+				t.Fatalf(err.Error())
+			}
+			defer os.Remove(filename)
+
+			_, err = LoadConfig(filename, validate)
+
+			expected := expectations[index]
+
+			if err == nil {
+				t.Errorf("no error returned, expected:\n%v", expected)
+			}
+
+			if err.Error() != expected {
+				t.Errorf("\nexpected:\n%v\ngot:\n%v", expected, err.Error())
+			}
+		})
+	}
+}
