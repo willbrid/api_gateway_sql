@@ -28,10 +28,10 @@ type Database struct {
 }
 
 type Target struct {
-	Name           string   `mapstructure:"name" validate:"required,max=25"`
-	DataSourceName string   `mapstructure:"data_source_name" validate:"required"`
-	Datafields     []string `mapstructure:"datafields"`
-	SqlQuery       string   `mapstructure:"sql" validate:"required"`
+	Name           string `mapstructure:"name" validate:"required,max=25"`
+	DataSourceName string `mapstructure:"data_source_name" validate:"required"`
+	Datafields     string `mapstructure:"datafields"`
+	SqlQuery       string `mapstructure:"sql" validate:"required"`
 }
 
 type Config struct {
