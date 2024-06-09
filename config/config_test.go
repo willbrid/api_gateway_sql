@@ -110,3 +110,26 @@ db_api_sql:
 		})
 	}
 }
+
+func TestTimeoutField(t *testing.T) {
+	configContent := `---
+db_api_sql:
+  timeout: ''
+`
+
+	filename, err := utils.CreateConfigFileForTesting(configContent)
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+	defer os.Remove(filename)
+
+	_, err = LoadConfig(filename, validate)
+
+	if err == nil {
+		t.Errorf("no error returned")
+	}
+
+	if err.Error() == "" {
+		t.Errorf("no error message found")
+	}
+}
