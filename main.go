@@ -42,6 +42,7 @@ func main() {
 	apisqlInstance := apisql.NewApiSql(configLoaded)
 	router := mux.NewRouter()
 	router.HandleFunc("/dbapisql/{targetname}", apisqlInstance.ApiSqlHandler).Methods("POST")
+	router.Use(apisqlInstance.AuthMiddleware)
 
 	strListenPort := strconv.Itoa(listenPort)
 	logging.Log(logging.Info, "server is listening on port %v", strListenPort)
