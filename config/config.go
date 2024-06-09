@@ -53,7 +53,7 @@ func setConfigDefaults(v *viper.Viper) {
 }
 
 func LoadConfig(filename string, validate *validator.Validate) (*Config, error) {
-	viper.SetConfigFile("yaml")
+	viper.SetConfigType("yaml")
 	viper.SetConfigFile(filename)
 
 	if err := viper.ReadInConfig(); err != nil {
