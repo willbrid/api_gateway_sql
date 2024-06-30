@@ -90,3 +90,37 @@ func LoadConfig(filename string, validate *validator.Validate) (*Config, error) 
 
 	return &config, nil
 }
+
+func (config *Config) GetTargetByName(targetName string) (Target, bool) {
+	var (
+		target Target
+		found  bool = false
+	)
+
+	for _, targetItem := range config.DbApiSQL.Targets {
+		if targetItem.Name == targetName {
+			found = true
+			target = targetItem
+			break
+		}
+	}
+
+	return target, found
+}
+
+func (config *Config) GetDatabaseByDataSourceName(dataSourceName string) (Database, bool) {
+	var (
+		database Database
+		found    bool = false
+	)
+
+	for _, databaseItem := range config.DbApiSQL.Databases {
+		if databaseItem.Name == dataSourceName {
+			found = true
+			database = databaseItem
+			break
+		}
+	}
+
+	return database, found
+}
