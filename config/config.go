@@ -35,21 +35,21 @@ type Target struct {
 }
 
 type Config struct {
-	DbApiSQL struct {
+	ApiGatewaySQL struct {
 		Timeout   time.Duration `mapstructure:"timeout" validate:"required"`
 		Auth      `mapstructure:"auth"`
 		Databases []Database `mapstructure:"databases" validate:"gt=0,required,dive"`
 		Targets   []Target   `mapstructure:"targets" validate:"gt=0,required,dive"`
-	} `mapstructure:"db_api_sql"`
+	} `mapstructure:"api_gateway_sql"`
 }
 
 func setConfigDefaults(v *viper.Viper) {
-	v.SetDefault("db_api_sql.timeout", "10s")
-	v.SetDefault("db_api_sql.auth.enabled", false)
-	v.SetDefault("db_api_sql.auth.username", "")
-	v.SetDefault("db_api_sql.auth.password", "")
-	v.SetDefault("db_api_sql.databases", make([]Database, 0))
-	v.SetDefault("db_api_sql.targets", make([]Target, 0))
+	v.SetDefault("api_gateway_sql.timeout", "10s")
+	v.SetDefault("api_gateway_sql.auth.enabled", false)
+	v.SetDefault("api_gateway_sql.auth.username", "")
+	v.SetDefault("api_gateway_sql.auth.password", "")
+	v.SetDefault("api_gateway_sql.databases", make([]Database, 0))
+	v.SetDefault("api_gateway_sql.targets", make([]Target, 0))
 }
 
 func LoadConfig(filename string, validate *validator.Validate) (*Config, error) {
@@ -97,7 +97,7 @@ func (config *Config) GetTargetByName(targetName string) (Target, bool) {
 		found  bool = false
 	)
 
-	for _, targetItem := range config.DbApiSQL.Targets {
+	for _, targetItem := range config.ApiGatewaySQL.Targets {
 		if targetItem.Name == targetName {
 			found = true
 			target = targetItem
@@ -114,7 +114,7 @@ func (config *Config) GetDatabaseByDataSourceName(dataSourceName string) (Databa
 		found    bool = false
 	)
 
-	for _, databaseItem := range config.DbApiSQL.Databases {
+	for _, databaseItem := range config.ApiGatewaySQL.Databases {
 		if databaseItem.Name == dataSourceName {
 			found = true
 			database = databaseItem

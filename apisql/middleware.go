@@ -12,7 +12,7 @@ func (apiSql *ApiSql) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
 		var auth string = req.Header.Get("Authorization")
 
-		if apiSql.config.DbApiSQL.Auth.Enabled {
+		if apiSql.config.ApiGatewaySQL.Auth.Enabled {
 			if auth == "" {
 				logging.Log(logging.Error, "no authorization header found")
 				http.Error(resp, "invalid credential", http.StatusUnauthorized)
@@ -36,7 +36,7 @@ func (apiSql *ApiSql) AuthMiddleware(next http.Handler) http.Handler {
 			credentialParts := strings.SplitN(string(decodedToken), ":", 2)
 			username := credentialParts[0]
 			password := credentialParts[1]
-			if username != apiSql.config.DbApiSQL.Auth.Username || password != apiSql.config.DbApiSQL.Auth.Password {
+			if username != apiSql.config.ApiGatewaySQL.Auth.Username || password != apiSql.config.ApiGatewaySQL.Auth.Password {
 				logging.Log(logging.Error, "invalid username or password")
 				http.Error(resp, "invalid credential", http.StatusUnauthorized)
 				return
