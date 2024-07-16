@@ -24,7 +24,7 @@ api_gateway_sql:
     password: xxxxxxxx
   databases:
   - name: "xxxxx"
-    type: "mariadb"
+    type: "sqlite"
     host: "127.0.0.1"
     port: 3306
     username: "xxxxx"
@@ -32,8 +32,8 @@ api_gateway_sql:
     dbname: "xxxxx"
     sslmode: false
   targets:
-  - name: "xxxxx"
-    data_source_name: "xxxxx"
+  - name: xxxxx
+    data_source_name: xxxxx
     datafields: ""
     sql: "select * from students"
 `
@@ -64,7 +64,7 @@ func triggerTest(t *testing.T, statusCode int, credential string) {
 	rr := httptest.NewRecorder()
 
 	router := mux.NewRouter()
-	router.HandleFunc("/api-gateway-sql/xxxxx", apisqlInstance.ApiSqlHandler).Methods("GET")
+	router.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiSqlHandler).Methods("GET")
 	router.Use(apisqlInstance.AuthMiddleware)
 	router.ServeHTTP(rr, req)
 
