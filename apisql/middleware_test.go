@@ -16,7 +16,7 @@ import (
 var validate *validator.Validate = validator.New(validator.WithRequiredStructEnabled())
 
 const configContent string = `---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
