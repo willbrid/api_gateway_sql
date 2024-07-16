@@ -21,7 +21,7 @@ func main() {
 		listenPort int
 	)
 
-	flag.StringVar(&configFile, "config-file", "config.default.yaml", "configuration file path")
+	flag.StringVar(&configFile, "config-file", "fixtures/config.default.yaml", "configuration file path")
 	flag.IntVar(&listenPort, "port", 5297, "listening port")
 	flag.Parse()
 
