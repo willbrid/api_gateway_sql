@@ -15,7 +15,7 @@ api_gateway_sql:
     sslmode: false
   targets:
   - name: list-student
-    data_source_name: datasource1
+    data_source_name: datasource
     datafields: ""
     multi: false
     sql: "select * from student"
