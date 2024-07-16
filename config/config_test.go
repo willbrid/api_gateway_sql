@@ -47,32 +47,32 @@ func TestLoadConfigFileNotExist(t *testing.T) {
 func TestAuthFieldWithAuthEnabled(t *testing.T) {
 	configSlices := []string{
 		`---
-db_api_sql:
+api_gateway_sql:
   auth:
     enabled: true
     username: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   auth:
     enabled: true
     username: "x"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   auth:
     enabled: true
     username: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   auth:
     enabled: true
     username: "xxxxx"
     password: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   auth:
     enabled: true
     username: "xxxxx"
@@ -113,7 +113,7 @@ db_api_sql:
 
 func TestTimeoutField(t *testing.T) {
 	configContent := `---
-db_api_sql:
+api_gateway_sql:
   timeout: ''
 `
 
@@ -137,7 +137,7 @@ db_api_sql:
 func TestDabatasesField(t *testing.T) {
 	configSlices := []string{
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -145,7 +145,7 @@ db_api_sql:
     password: xxxxxxxx
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -154,7 +154,7 @@ db_api_sql:
   databases:
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -164,7 +164,7 @@ db_api_sql:
   - name: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -174,7 +174,7 @@ db_api_sql:
   - name: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -185,7 +185,7 @@ db_api_sql:
     type: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -196,7 +196,7 @@ db_api_sql:
     type: "xxxxx"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -208,7 +208,7 @@ db_api_sql:
     host: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -220,7 +220,7 @@ db_api_sql:
     host: "127.0"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -233,7 +233,7 @@ db_api_sql:
     port: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -246,7 +246,7 @@ db_api_sql:
     port: "1000"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -259,7 +259,7 @@ db_api_sql:
     port: "49152"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -273,7 +273,7 @@ db_api_sql:
     username: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -288,7 +288,7 @@ db_api_sql:
     password: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -349,7 +349,7 @@ db_api_sql:
 func TestTargetsField(t *testing.T) {
 	configSlices := []string{
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -366,7 +366,7 @@ db_api_sql:
     sslmode: false
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -384,7 +384,7 @@ db_api_sql:
   targets:
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -403,7 +403,7 @@ db_api_sql:
   - name: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -422,7 +422,7 @@ db_api_sql:
   - name: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
@@ -442,7 +442,7 @@ db_api_sql:
     data_source_name: ""
 `,
 		`---
-db_api_sql:
+api_gateway_sql:
   timeout: "10s"
   auth:
     enabled: true
