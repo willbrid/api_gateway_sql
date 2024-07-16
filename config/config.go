@@ -1,7 +1,7 @@
 package config
 
 import (
-	"db-api-sql/logging"
+	"api-gateway-sql/logging"
 
 	"fmt"
 	"time"

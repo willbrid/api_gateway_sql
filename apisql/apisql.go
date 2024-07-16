@@ -1,6 +1,6 @@
 package apisql
 
-import "db-api-sql/config"
+import "api-gateway-sql/config"
 
 type ApiSql struct {
 	config *config.Config

@@ -1,7 +1,7 @@
 package apisql
 
 import (
-	"db-api-sql/logging"
+	"api-gateway-sql/logging"
 
 	"encoding/base64"
 	"net/http"

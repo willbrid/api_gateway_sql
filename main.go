@@ -1,9 +1,9 @@
 package main
 
 import (
-	"db-api-sql/apisql"
-	"db-api-sql/config"
-	"db-api-sql/logging"
+	"api-gateway-sql/apisql"
+	"api-gateway-sql/config"
+	"api-gateway-sql/logging"
 
 	"flag"
 	"net/http"

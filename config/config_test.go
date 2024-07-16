@@ -1,7 +1,7 @@
 package config
 
 import (
-	"db-api-sql/utils"
+	"api-gateway-sql/utils"
 
 	"fmt"
 	"os"

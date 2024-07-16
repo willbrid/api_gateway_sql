@@ -1,4 +1,4 @@
-db_api_sql:
+api_gateway_sql:
   timeout: 10s
   auth:
     enabled: true

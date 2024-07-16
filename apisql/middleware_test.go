@@ -1,8 +1,8 @@
 package apisql
 
 import (
-	"db-api-sql/config"
-	"db-api-sql/utils"
+	"api-gateway-sql/config"
+	"api-gateway-sql/utils"
 
 	"net/http"
 	"net/http/httptest"

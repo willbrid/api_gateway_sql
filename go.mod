@@ -1,4 +1,4 @@
-module db-api-sql
+module api-gateway-sql
 
 go 1.21.7
 
