@@ -5,24 +5,8 @@ api_gateway_sql:
     username: test
     password: test@test
   databases:
-  - name: datasource1
-    type: mariadb
-    host: 127.0.0.1
-    port: 3306
-    username: "test"
-    password: "test"
-    dbname: test
-    sslmode: false
-  - name: datasource2
-    type: mysql
-    host: 127.0.0.1
-    port: 3306
-    username: "test"
-    password: "test"
-    dbname: test
-    sslmode: false
-  - name: datasource3
-    type: postgres
+  - name: datasource
+    type: sqlite
     host: 127.0.0.1
     port: 3306
     username: "test"
@@ -33,4 +17,5 @@ api_gateway_sql:
   - name: list-student
     data_source_name: datasource1
     datafields: ""
+    multi: false
     sql: "select * from student"
