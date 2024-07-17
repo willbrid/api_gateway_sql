@@ -1,4 +1,104 @@
+basePath: /v1
+definitions:
+  httputil.HTTPResp:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data: {}
+      message:
+        example: status ok
+        type: string
+    type: object
+host: localhost:5297
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: ngaswilly77@gmail.com
+    name: API Support
+  description: API used for executing SQL QUERY
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: API GATEWAY SQL
+  version: 1.0.0
+paths:
+  /api-gateway-sql/{targetname}:
+    get:
+      consumes:
+      - application/json
+      description: Trigger SQL query without params
+      parameters:
+      - description: Target Name
+        in: path
+        name: targetname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+      security:
+      - BasicAuth: []
+      summary: Get SQL Query result
+      tags:
+      - apisql
+    post:
+      consumes:
+      - application/json
+      description: Trigger SQL query with params
+      parameters:
+      - description: Target Name
+        in: path
+        name: targetname
+        required: true
+        type: string
+      - description: Data to send
+        in: body
+        name: data
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+      security:
+      - BasicAuth: []
+      summary: Get SQL Query result
+      tags:
+      - apisql
+securityDefinitions:
+  BasicAuth:
+    type: basic
 swagger: "2.0"
