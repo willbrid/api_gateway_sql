@@ -1,6 +1,8 @@
 package apisql
 
 import (
+	"api-gateway-sql/utils/httputil"
+
 	"fmt"
 	"net/http"
 
@@ -23,8 +25,6 @@ func (apisql *ApiSql) ApiSqlHandler(resp http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	fmt.Println("DBNAME : "+database.Dbname, " TARGET NAME : "+target.Name)
-
-	resp.Header().Set("Content-Type", "application/json")
-	resp.WriteHeader(http.StatusOK)
+	message := fmt.Sprintf("DBNAME : %s, TARGET NAME : %s", database.Dbname, target.Name)
+	httputil.SendJSONResponse(resp, http.StatusOK, message, nil)
 }
