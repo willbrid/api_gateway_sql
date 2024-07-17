@@ -64,7 +64,7 @@ func triggerTest(t *testing.T, statusCode int, credential string) {
 	rr := httptest.NewRecorder()
 
 	router := mux.NewRouter()
-	router.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiSqlHandler).Methods("GET")
+	router.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiGetSqlHandler).Methods("GET")
 	router.Use(apisqlInstance.AuthMiddleware)
 	router.ServeHTTP(rr, req)
 
