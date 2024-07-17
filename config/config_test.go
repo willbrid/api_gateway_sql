@@ -1,7 +1,7 @@
 package config
 
 import (
-	"api-gateway-sql/utils"
+	"api-gateway-sql/utils/file"
 
 	"fmt"
 	"os"
@@ -90,7 +90,7 @@ api_gateway_sql:
 
 	for index, configContent := range configSlices {
 		t.Run(fmt.Sprintf("LoadConfig #%v", index), func(subT *testing.T) {
-			filename, err := utils.CreateConfigFileForTesting(configContent)
+			filename, err := file.CreateConfigFileForTesting(configContent)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}
@@ -117,7 +117,7 @@ api_gateway_sql:
   timeout: ''
 `
 
-	filename, err := utils.CreateConfigFileForTesting(configContent)
+	filename, err := file.CreateConfigFileForTesting(configContent)
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
@@ -325,7 +325,7 @@ api_gateway_sql:
 
 	for index, configContent := range configSlices {
 		t.Run(fmt.Sprintf("LoadConfig #%v", index), func(subT *testing.T) {
-			filename, err := utils.CreateConfigFileForTesting(configContent)
+			filename, err := file.CreateConfigFileForTesting(configContent)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}
@@ -476,7 +476,7 @@ api_gateway_sql:
 
 	for index, configContent := range configSlices {
 		t.Run(fmt.Sprintf("LoadConfig #%v", index), func(subT *testing.T) {
-			filename, err := utils.CreateConfigFileForTesting(configContent)
+			filename, err := file.CreateConfigFileForTesting(configContent)
 			if err != nil {
 				t.Fatalf(err.Error())
 			}

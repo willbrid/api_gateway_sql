@@ -2,7 +2,7 @@ package apisql
 
 import (
 	"api-gateway-sql/config"
-	"api-gateway-sql/utils"
+	"api-gateway-sql/utils/file"
 
 	"net/http"
 	"net/http/httptest"
@@ -39,7 +39,7 @@ api_gateway_sql:
 `
 
 func triggerTest(t *testing.T, statusCode int, credential string) {
-	filename, err := utils.CreateConfigFileForTesting(configContent)
+	filename, err := file.CreateConfigFileForTesting(configContent)
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
