@@ -12,7 +12,7 @@ func (apiSql *ApiSql) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
 		var auth string = req.Header.Get("Authorization")
 
-		if apiSql.config.ApiGatewaySQL.Auth.Enabled {
+		if apiSql.config.ApiGatewaySQL.Auth.Enabled && !strings.HasPrefix(req.RequestURI, "/swagger/") {
 			if auth == "" {
 				logging.Log(logging.Error, "no authorization header found")
 				http.Error(resp, "invalid credential", http.StatusUnauthorized)
