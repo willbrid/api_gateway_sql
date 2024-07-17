@@ -1,4 +1,4 @@
-# Db_api_sql
+# Api_gateway_sql
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
