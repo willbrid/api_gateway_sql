@@ -3,18 +3,33 @@ package main
 import (
 	"api-gateway-sql/apisql"
 	"api-gateway-sql/config"
+	_ "api-gateway-sql/docs"
 	"api-gateway-sql/logging"
 
 	"flag"
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 var validate *validator.Validate
 
+// @title API GATEWAY SQL
+// @version 1.0.0
+// @description API used for executing SQL QUERY
+
+// @contact.name API Support
+// @contact.email ngaswilly77@gmail.com
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost
+// @BasePath /
 func main() {
 	var (
 		configFile  string
@@ -45,17 +60,28 @@ func main() {
 	}
 	logging.Log(logging.Info, "configuration file '%s' was loaded successfully", configFile)
 
-	apisqlInstance := apisql.NewApiSql(configLoaded)
-	router := mux.NewRouter()
-	router.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiSqlHandler).Methods("GET", "POST")
-	router.Use(apisqlInstance.AuthMiddleware)
-
 	strListenPort := strconv.Itoa(listenPort)
 	boolEnableHttps, errParse := strconv.ParseBool(enableHttps)
 	if errParse != nil {
 		logging.Log(logging.Error, "unable to parse enable-https flag")
 		return
 	}
+
+	swaggerUrl := fmt.Sprintf("http://localhost:%s/swagger/doc.json", strListenPort)
+	if boolEnableHttps {
+		swaggerUrl = fmt.Sprintf("https://localhost:%s/swagger/doc.json", strListenPort)
+	}
+
+	apisqlInstance := apisql.NewApiSql(configLoaded)
+	router := mux.NewRouter()
+	router.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiSqlHandler).Methods("GET", "POST")
+	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
+		httpSwagger.URL(swaggerUrl),
+		httpSwagger.DeepLinking(true),
+		httpSwagger.DocExpansion("none"),
+		httpSwagger.DomID("swagger-ui"),
+	)).Methods("GET")
+	router.Use(apisqlInstance.AuthMiddleware)
 
 	logging.Log(logging.Info, "server is listening on port %v", strListenPort)
 	if boolEnableHttps {
