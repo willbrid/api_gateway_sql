@@ -21,15 +21,13 @@ var validate *validator.Validate
 // @title API GATEWAY SQL
 // @version 1.0.0
 // @description API used for executing SQL QUERY
-
 // @contact.name API Support
 // @contact.email ngaswilly77@gmail.com
-
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
-
-// @host localhost
-// @BasePath /
+// @host localhost:5297
+// @BasePath /v1
+// @securityDefinitions.basic BasicAuth
 func main() {
 	var (
 		configFile  string
@@ -74,7 +72,10 @@ func main() {
 
 	apisqlInstance := apisql.NewApiSql(configLoaded)
 	router := mux.NewRouter()
-	router.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiSqlHandler).Methods("GET", "POST")
+	v1 := router.PathPrefix("/v1").Subrouter()
+
+	v1.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiGetSqlHandler).Methods("GET")
+	v1.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiPostSqlHandler).Methods("POST")
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.URL(swaggerUrl),
 		httpSwagger.DeepLinking(true),
