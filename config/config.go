@@ -18,7 +18,7 @@ type Auth struct {
 
 type Database struct {
 	Name     string `mapstructure:"name" validate:"required,max=25"`
-	Type     string `mapstructure:"type" validate:"required,oneof=mariadb mysql postgres sqlite"`
+	Type     string `mapstructure:"type" validate:"required,oneof=mariadb mysql postgres sqlserver sqlite"`
 	Host     string `mapstructure:"host" validate:"required,ipv4"`
 	Port     int    `mapstructure:"port" validate:"required,min=1024,max=49151"`
 	Username string `mapstructure:"username" validate:"required"`
