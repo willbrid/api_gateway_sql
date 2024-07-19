@@ -1,6 +1,7 @@
 package apisql
 
 import (
+	"api-gateway-sql/logging"
 	"api-gateway-sql/utils/httputil"
 
 	"fmt"
@@ -28,6 +29,7 @@ func (apisql *ApiSql) ApiGetSqlHandler(resp http.ResponseWriter, req *http.Reque
 
 	target, database, err := getTargetAndDatabase(apisql, targetName)
 	if err != nil {
+		logging.Log(logging.Error, err.Error())
 		http.Error(resp, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -56,6 +58,7 @@ func (apisql *ApiSql) ApiPostSqlHandler(resp http.ResponseWriter, req *http.Requ
 
 	target, database, err := getTargetAndDatabase(apisql, targetName)
 	if err != nil {
+		logging.Log(logging.Error, err.Error())
 		http.Error(resp, err.Error(), http.StatusInternalServerError)
 		return
 	}
