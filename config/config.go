@@ -19,10 +19,10 @@ type Auth struct {
 type Database struct {
 	Name     string `mapstructure:"name" validate:"required,max=25"`
 	Type     string `mapstructure:"type" validate:"required,oneof=mariadb mysql postgres sqlserver sqlite"`
-	Host     string `mapstructure:"host" validate:"required,ipv4"`
-	Port     int    `mapstructure:"port" validate:"required,min=1024,max=49151"`
-	Username string `mapstructure:"username" validate:"required"`
-	Password string `mapstructure:"password" validate:"required"`
+	Host     string `mapstructure:"host" validate:"required_unless=Type sqlite,omitempty,ipv4"`
+	Port     int    `mapstructure:"port" validate:"required_unless=Type sqlite,omitempty,min=1024,max=49151"`
+	Username string `mapstructure:"username" validate:"required_unless=Type sqlite"`
+	Password string `mapstructure:"password" validate:"required_unless=Type sqlite"`
 	Dbname   string `mapstructure:"dbname" validate:"required"`
 	Sslmode  bool   `mapstructure:"sslmode"`
 }
