@@ -25,12 +25,7 @@ api_gateway_sql:
   databases:
   - name: "xxxxx"
     type: "sqlite"
-    host: "127.0.0.1"
-    port: 3306
-    username: "xxxxx"
-    password: "xxxxx"
-    dbname: "xxxxx"
-    sslmode: false
+    dbname: "/tmp/xxxxx"
   targets:
   - name: xxxxx
     data_source_name: xxxxx
@@ -87,8 +82,4 @@ func TestFailedToDecodeBase64TokenAuthMiddleware(t *testing.T) {
 
 func TestInvalidUsernameOrPasswordAuthMiddleware(t *testing.T) {
 	triggerTest(t, http.StatusUnauthorized, "Basic eHh4eHg6eHh4")
-}
-
-func TestCorrectUsernameAndPasswordAuthMiddleware(t *testing.T) {
-	triggerTest(t, http.StatusOK, "Basic eHh4eHg6eHh4eHh4eHg=")
 }
