@@ -7,7 +7,7 @@ import (
 )
 
 type DBInstance interface {
-	Connect(dbConfig config.Database) (*gorm.DB, error)
+	Connect(dbConfig config.Database, timeout int) (*gorm.DB, error)
 }
 
 const (

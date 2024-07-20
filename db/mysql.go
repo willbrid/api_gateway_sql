@@ -11,8 +11,8 @@ import (
 
 type MySQLInstance struct{}
 
-func (i MySQLInstance) Connect(db config.Database) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True&loc=Local", db.Username, db.Password, db.Host, db.Port, db.Dbname)
+func (i MySQLInstance) Connect(db config.Database, timeout int) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True&loc=Local&timeout=%vs", db.Username, db.Password, db.Host, db.Port, db.Dbname, timeout)
 
 	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
 }
