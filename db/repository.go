@@ -1,9 +1,17 @@
 package db
 
-import "gorm.io/gorm"
+import (
+	"strings"
 
-// QueryWithScan used to execute sql query like select
-func QueryWithScan(db *gorm.DB, sql string, params []interface{}) ([]map[string]interface{}, error) {
+	"gorm.io/gorm"
+)
+
+const (
+	Select string = "SELECT"
+)
+
+// ExecuteWithScan used to execute sql query like select
+func ExecuteWithScan(db *gorm.DB, sql string, params []interface{}) ([]map[string]interface{}, error) {
 	var result []map[string]interface{}
 
 	if len(params) > 0 {
@@ -19,8 +27,8 @@ func QueryWithScan(db *gorm.DB, sql string, params []interface{}) ([]map[string]
 	return result, nil
 }
 
-// QueryWithExec used to execute sql query like insert, update, delete
-func QueryWithExec(db *gorm.DB, sql string, params []interface{}) error {
+// ExecuteWithExec used to execute sql query like insert, update, delete
+func ExecuteWithExec(db *gorm.DB, sql string, params []interface{}) error {
 	if len(params) > 0 {
 		if err := db.Exec(sql, params...).Error; err != nil {
 			return err
@@ -32,4 +40,9 @@ func QueryWithExec(db *gorm.DB, sql string, params []interface{}) error {
 	}
 
 	return nil
+}
+
+// GetQuerySQLType used to get the base type (select, insert, update, delete,...) of a sql query
+func GetSQLQueryType(sql string) string {
+	return strings.ToUpper(strings.SplitN(sql, " ", 2)[0])
 }
