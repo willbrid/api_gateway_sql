@@ -2,8 +2,12 @@ package apisql
 
 import (
 	"api-gateway-sql/config"
+	"api-gateway-sql/db"
+	"api-gateway-sql/logging"
 
 	"fmt"
+
+	"gorm.io/gorm"
 )
 
 func getTargetAndDatabase(apisql *ApiSql, targetName string) (*config.Target, *config.Database, error) {
@@ -18,4 +22,41 @@ func getTargetAndDatabase(apisql *ApiSql, targetName string) (*config.Target, *c
 	}
 
 	return &target, &database, nil
+}
+
+func executeSingleSQLQuery(target config.Target, database config.Database, timeout int, postParams map[string]interface{}) (interface{}, error) {
+	var (
+		cnx    *gorm.DB
+		result interface{} = nil
+		err    error       = nil
+	)
+
+	dbInstance := db.GetDatabaseInstance(database.Type)
+	cnx, err = dbInstance.Connect(database, timeout)
+	if err != nil {
+		logging.Log(logging.Error, err.Error())
+		return nil, err
+	}
+	defer func() {
+		dbCnx, _ := cnx.DB()
+		dbCnx.Close()
+	}()
+
+	sqlQueryType := db.GetSQLQueryType(target.SqlQuery)
+	parsedQuery, params := db.TransformQuery(target.SqlQuery, postParams)
+
+	switch sqlQueryType {
+	case db.Select:
+		result, err = db.ExecuteWithScan(cnx, parsedQuery, params)
+		if err != nil {
+			logging.Log(logging.Error, err.Error())
+		}
+	default:
+		err = db.ExecuteWithExec(cnx, parsedQuery, params)
+		if err != nil {
+			logging.Log(logging.Error, err.Error())
+		}
+	}
+
+	return result, err
 }
