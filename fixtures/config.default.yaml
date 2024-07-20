@@ -7,12 +7,7 @@ api_gateway_sql:
   databases:
   - name: datasource
     type: sqlite
-    host: 127.0.0.1
-    port: 3306
-    username: "test"
-    password: "test"
-    dbname: test
-    sslmode: false
+    dbname: "/tmp/test"
   targets:
   - name: list-student
     data_source_name: datasource
