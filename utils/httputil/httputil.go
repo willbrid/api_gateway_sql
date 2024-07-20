@@ -7,6 +7,11 @@ import (
 	"net/http"
 )
 
+const (
+	HTTPStatusOKMessage                  = "OK"
+	HTTPStatusInternalServerErrorMessage = "Internal Server Error"
+)
+
 type HTTPResp struct {
 	Code    int         `json:"code" example:"200"`
 	Message string      `json:"message" example:"status ok"`
