@@ -1,6 +1,7 @@
 package db
 
 import (
+	"regexp"
 	"strings"
 
 	"gorm.io/gorm"
@@ -11,8 +12,8 @@ const (
 )
 
 // ExecuteWithScan used to execute sql query like select
-func ExecuteWithScan(db *gorm.DB, sql string, params []interface{}) ([]map[string]interface{}, error) {
-	var result []map[string]interface{}
+func ExecuteWithScan(db *gorm.DB, sql string, params []interface{}) (interface{}, error) {
+	var result interface{}
 
 	if len(params) > 0 {
 		if err := db.Raw(sql, params...).Scan(&result).Error; err != nil {
@@ -45,4 +46,22 @@ func ExecuteWithExec(db *gorm.DB, sql string, params []interface{}) error {
 // GetQuerySQLType used to get the base type (select, insert, update, delete,...) of a sql query
 func GetSQLQueryType(sql string) string {
 	return strings.ToUpper(strings.SplitN(sql, " ", 2)[0])
+}
+
+// TransformQuery used to parse query from config target
+func TransformQuery(query string, params map[string]interface{}) (string, []interface{}) {
+	re := regexp.MustCompile(`{{(\w+)}}`)
+	matches := re.FindAllStringSubmatch(query, -1)
+
+	values := make([]interface{}, 0, len(matches))
+	transformedQuery := re.ReplaceAllStringFunc(query, func(param string) string {
+		paramName := param[2 : len(param)-2]
+		if value, exists := params[paramName]; exists {
+			values = append(values, value)
+			return "?"
+		}
+		return param
+	})
+
+	return transformedQuery, values
 }
