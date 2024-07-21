@@ -7,37 +7,27 @@ import (
 	"gorm.io/gorm"
 )
 
+type SelectResult []map[string]interface{}
+
 const (
 	Select string = "SELECT"
 )
 
 // ExecuteWithScan used to execute sql query like select
-func ExecuteWithScan(db *gorm.DB, sql string, params []interface{}) (interface{}, error) {
-	var result interface{}
+func ExecuteWithScan(cnx *gorm.DB, sql string, params []interface{}) (SelectResult, error) {
+	var result SelectResult
 
-	if len(params) > 0 {
-		if err := db.Raw(sql, params...).Scan(&result).Error; err != nil {
-			return nil, err
-		}
-	} else {
-		if err := db.Raw(sql).Scan(&result).Error; err != nil {
-			return nil, err
-		}
+	if err := cnx.Raw(sql, params...).Scan(&result).Error; err != nil {
+		return nil, err
 	}
 
 	return result, nil
 }
 
 // ExecuteWithExec used to execute sql query like insert, update, delete
-func ExecuteWithExec(db *gorm.DB, sql string, params []interface{}) error {
-	if len(params) > 0 {
-		if err := db.Exec(sql, params...).Error; err != nil {
-			return err
-		}
-	} else {
-		if err := db.Exec(sql).Error; err != nil {
-			return err
-		}
+func ExecuteWithExec(cnx *gorm.DB, sql string, params []interface{}) error {
+	if err := cnx.Exec(sql, params...).Error; err != nil {
+		return err
 	}
 
 	return nil
