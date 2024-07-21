@@ -15,7 +15,7 @@ const (
 
 // ExecuteWithScan used to execute sql query like select
 func ExecuteWithScan(cnx *gorm.DB, sql string, params []interface{}) (SelectResult, error) {
-	var result SelectResult
+	var result []map[string]interface{}
 
 	if err := cnx.Raw(sql, params...).Scan(&result).Error; err != nil {
 		return nil, err
