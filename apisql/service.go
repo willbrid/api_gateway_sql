@@ -78,7 +78,7 @@ func executeInitSQLQuery(sql string, database config.Database, timeout int) erro
 		dbCnx.Close()
 	}()
 
-	err = db.ExecuteWithExec(cnx, sql, nil)
+	err = db.ExecuteWithExec(cnx, sql, make([]interface{}, 0))
 
 	return err
 }
