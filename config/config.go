@@ -30,7 +30,6 @@ type Database struct {
 type Target struct {
 	Name           string `mapstructure:"name" validate:"required,max=25"`
 	DataSourceName string `mapstructure:"data_source_name" validate:"required"`
-	Datafields     string `mapstructure:"datafields"`
 	Multi          bool   `mapstructure:"multi"`
 	SqlQuery       string `mapstructure:"sql" validate:"required"`
 }
