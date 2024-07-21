@@ -74,8 +74,9 @@ func main() {
 	router := mux.NewRouter()
 	v1 := router.PathPrefix("/v1").Subrouter()
 
-	v1.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiGetSqlHandler).Methods("GET")
-	v1.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiPostSqlHandler).Methods("POST")
+	v1.HandleFunc("/api-gateway-sql/{target}", apisqlInstance.ApiGetSqlHandler).Methods("GET")
+	v1.HandleFunc("/api-gateway-sql/{target}", apisqlInstance.ApiPostSqlHandler).Methods("POST")
+	v1.HandleFunc("/api-gateway-sql/{datasource}/init", apisqlInstance.InitializeDatabaseHandler).Methods("POST")
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.URL(swaggerUrl),
 		httpSwagger.DeepLinking(true),
