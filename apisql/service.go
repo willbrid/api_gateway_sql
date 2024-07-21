@@ -24,11 +24,11 @@ func getTargetAndDatabase(apisql *ApiSql, targetName string) (*config.Target, *c
 	return &target, &database, nil
 }
 
-func executeSingleSQLQuery(target config.Target, database config.Database, timeout int, postParams map[string]interface{}) (interface{}, error) {
+func executeSingleSQLQuery(target config.Target, database config.Database, timeout int, postParams map[string]interface{}) (db.SelectResult, error) {
 	var (
 		cnx    *gorm.DB
-		result interface{} = nil
-		err    error       = nil
+		result db.SelectResult = nil
+		err    error           = nil
 	)
 
 	dbInstance := db.GetDatabaseInstance(database.Type)
@@ -78,7 +78,7 @@ func executeInitSQLQuery(sql string, database config.Database, timeout int) erro
 		dbCnx.Close()
 	}()
 
-	err = cnx.Exec(sql, nil).Error
+	err = db.ExecuteWithExec(cnx, sql, nil)
 
 	return err
 }
