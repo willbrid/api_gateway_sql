@@ -14,7 +14,5 @@ type SqliteInstance struct{}
 func (i SqliteInstance) Connect(db config.Database, timeout int) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s.db", db.Dbname)
 
-	return gorm.Open(sqlite.Open(dsn), &gorm.Config{
-		PrepareStmt: true,
-	})
+	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 }
