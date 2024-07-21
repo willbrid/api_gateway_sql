@@ -5,12 +5,12 @@ api_gateway_sql:
     username: test
     password: test@test
   databases:
-  - name: datasource
+  - name: school
     type: sqlite
     dbname: "/tmp/test"
   targets:
   - name: list-student
-    data_source_name: datasource
+    data_source_name: school
     datafields: ""
     multi: false
     sql: "select * from student"
