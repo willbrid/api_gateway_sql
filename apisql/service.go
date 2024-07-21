@@ -60,3 +60,25 @@ func executeSingleSQLQuery(target config.Target, database config.Database, timeo
 
 	return result, err
 }
+
+func executeInitSQLQuery(sql string, database config.Database, timeout int) error {
+	var (
+		cnx *gorm.DB
+		err error = nil
+	)
+
+	dbInstance := db.GetDatabaseInstance(database.Type)
+	cnx, err = dbInstance.Connect(database, timeout)
+	if err != nil {
+		logging.Log(logging.Error, err.Error())
+		return err
+	}
+	defer func() {
+		dbCnx, _ := cnx.DB()
+		dbCnx.Close()
+	}()
+
+	err = cnx.Exec(sql, nil).Error
+
+	return err
+}
