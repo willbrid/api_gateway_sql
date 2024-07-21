@@ -4,6 +4,7 @@ import (
 	"api-gateway-sql/logging"
 	"api-gateway-sql/utils/httputil"
 
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -68,8 +69,20 @@ func (apisql *ApiSql) ApiPostSqlHandler(resp http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	message := fmt.Sprintf("DBNAME : %s, TARGET NAME : %s", database.Dbname, target.Name)
-	httputil.SendJSONResponse(resp, http.StatusOK, message, nil)
+	var postParams map[string]interface{}
+	if err := json.NewDecoder(req.Body).Decode(&postParams); err != nil {
+		logging.Log(logging.Error, err.Error())
+		httputil.SendJSONResponse(resp, http.StatusBadGateway, err.Error(), nil)
+		return
+	}
+
+	response, err := executeSingleSQLQuery(*target, *database, int(apisql.config.ApiGatewaySQL.Timeout), postParams)
+	if err != nil {
+		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
+		return
+	}
+
+	httputil.SendJSONResponse(resp, http.StatusOK, httputil.HTTPStatusOKMessage, response)
 }
 
 // InitializeDatabaseHandler godoc
