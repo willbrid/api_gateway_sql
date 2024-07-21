@@ -1,11 +1,11 @@
 -- Create tables
-CREATE TABLE school (
+CREATE TABLE IF NOT EXISTS school (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     address TEXT NOT NULL
 );
 
-CREATE TABLE teacher (
+CREATE TABLE IF NOT EXISTS teacher (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE teacher (
     FOREIGN KEY (school_id) REFERENCES school(id)
 );
 
-CREATE TABLE class (
+CREATE TABLE IF NOT EXISTS class (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     teacher_id INTEGER,
@@ -22,7 +22,7 @@ CREATE TABLE class (
     FOREIGN KEY (school_id) REFERENCES school(id)
 );
 
-CREATE TABLE student (
+CREATE TABLE IF NOT EXISTS student (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     age INTEGER NOT NULL,
