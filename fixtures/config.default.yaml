@@ -11,6 +11,5 @@ api_gateway_sql:
   targets:
   - name: list-student
     data_source_name: school
-    datafields: ""
     multi: false
     sql: "select * from student"
