@@ -26,7 +26,6 @@ func SendJSONResponse(resp http.ResponseWriter, status int, message string, data
 	}
 
 	resp.Header().Set("Content-Type", "application/json")
-	resp.WriteHeader(status)
 
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
@@ -35,5 +34,6 @@ func SendJSONResponse(resp http.ResponseWriter, status int, message string, data
 		return
 	}
 
+	resp.WriteHeader(status)
 	resp.Write(jsonResponse)
 }
