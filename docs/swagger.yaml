@@ -22,17 +22,22 @@ info:
   title: API GATEWAY SQL
   version: 1.0.0
 paths:
-  /api-gateway-sql/{targetname}:
-    get:
+  /api-gateway-sql/{datasource}/init:
+    post:
       consumes:
       - application/json
-      description: Trigger SQL query without params
+      description: Initialize Database by providing a sql query file
       parameters:
-      - description: Target Name
+      - description: Datasource Name
         in: path
-        name: targetname
+        name: datasource
         required: true
         type: string
+      - description: SQL Data to upload
+        in: formData
+        name: sqlfile
+        required: true
+        type: file
       produces:
       - application/json
       responses:
@@ -44,8 +49,35 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/httputil.HTTPResp'
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+      security:
+      - BasicAuth: []
+      summary: Initialize Database
+      tags:
+      - apisql
+  /api-gateway-sql/{target}:
+    get:
+      consumes:
+      - application/json
+      description: Trigger SQL query without params
+      parameters:
+      - description: Target Name
+        in: path
+        name: target
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPResp'
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/httputil.HTTPResp'
         "500":
@@ -64,7 +96,7 @@ paths:
       parameters:
       - description: Target Name
         in: path
-        name: targetname
+        name: target
         required: true
         type: string
       - description: Data to send
@@ -83,10 +115,6 @@ paths:
             $ref: '#/definitions/httputil.HTTPResp'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/httputil.HTTPResp'
-        "404":
-          description: Not Found
           schema:
             $ref: '#/definitions/httputil.HTTPResp'
         "500":
