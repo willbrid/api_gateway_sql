@@ -460,7 +460,6 @@ api_gateway_sql:
   targets:
   - name: "xxxxx"
     data_source_name: "xxxxx"
-    datafields: ""
     sql: ""
 `,
 	}
