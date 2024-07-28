@@ -462,6 +462,28 @@ api_gateway_sql:
     data_source_name: "xxxxx"
     sql: ""
 `,
+		`---
+api_gateway_sql:
+  timeout: "10s"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: 3306
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    sslmode: false
+  targets:
+  - name: "xxxxx"
+    data_source_name: "xxxxx"
+    sql: "select * from student"
+    Multi: true
+`,
 	}
 
 	expectations := []string{
@@ -471,6 +493,7 @@ api_gateway_sql:
 		"validation failed on field 'Name' for condition 'max'",
 		"validation failed on field 'DataSourceName' for condition 'required'",
 		"validation failed on field 'SqlQuery' for condition 'required'",
+		"validation failed on field 'BatchSize' for condition 'required_if'",
 	}
 
 	for index, configContent := range configSlices {
