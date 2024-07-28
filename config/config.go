@@ -31,6 +31,8 @@ type Target struct {
 	Name           string `mapstructure:"name" validate:"required,max=25"`
 	DataSourceName string `mapstructure:"data_source_name" validate:"required"`
 	Multi          bool   `mapstructure:"multi"`
+	BatchSize      int    `mapstructure:"batch_size" validate:"required_if=Multi true"`
+	BufferSize     int    `mapstructure:"buffer_size" validate:"required_if=Multi true"`
 	SqlQuery       string `mapstructure:"sql" validate:"required"`
 }
 
