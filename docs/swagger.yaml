@@ -10,7 +10,6 @@ definitions:
         example: status ok
         type: string
     type: object
-host: localhost:5297
 info:
   contact:
     email: ngaswilly77@gmail.com
@@ -18,7 +17,7 @@ info:
   description: API used for executing SQL QUERY
   license:
     name: MIT
-    url: https://opensource.org/licenses/MIT
+    url: https://github.com/willbrid/easy_api_prom_sms_alert/blob/main/LICENSE
   title: API GATEWAY SQL
   version: 1.0.0
 paths:
