@@ -45,8 +45,6 @@ func triggerTest(t *testing.T, statusCode int, credential string) {
 		t.Fatalf(err.Error())
 	}
 
-	apisqlInstance := NewApiSql(configLoaded)
-
 	req, err := http.NewRequest("GET", "/api-gateway-sql/xxxxx", nil)
 	if err != nil {
 		t.Fatal(err)
@@ -59,8 +57,12 @@ func triggerTest(t *testing.T, statusCode int, credential string) {
 	rr := httptest.NewRecorder()
 
 	router := mux.NewRouter()
-	router.HandleFunc("/api-gateway-sql/{targetname}", apisqlInstance.ApiGetSqlHandler).Methods("GET")
-	router.Use(apisqlInstance.AuthMiddleware)
+	router.HandleFunc("/api-gateway-sql/{targetname}", func(w http.ResponseWriter, r *http.Request) {
+		ApiGetSqlHandler(w, r, *configLoaded)
+	}).Methods("GET")
+	router.Use(func(next http.Handler) http.Handler {
+		return AuthMiddleware(next, *configLoaded)
+	})
 	router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != statusCode {
