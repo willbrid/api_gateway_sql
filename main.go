@@ -69,20 +69,27 @@ func main() {
 		swaggerUrl = fmt.Sprintf("https://localhost:%s/swagger/doc.json", strListenPort)
 	}
 
-	apisqlInstance := apisql.NewApiSql(configLoaded)
 	router := mux.NewRouter()
 	v1 := router.PathPrefix("/v1").Subrouter()
 
-	v1.HandleFunc("/api-gateway-sql/{target}", apisqlInstance.ApiGetSqlHandler).Methods("GET")
-	v1.HandleFunc("/api-gateway-sql/{target}", apisqlInstance.ApiPostSqlHandler).Methods("POST")
-	v1.HandleFunc("/api-gateway-sql/{datasource}/init", apisqlInstance.InitializeDatabaseHandler).Methods("POST")
+	v1.HandleFunc("/api-gateway-sql/{target}", func(w http.ResponseWriter, r *http.Request) {
+		apisql.ApiGetSqlHandler(w, r, *configLoaded)
+	}).Methods("GET")
+	v1.HandleFunc("/api-gateway-sql/{target}", func(w http.ResponseWriter, r *http.Request) {
+		apisql.ApiPostSqlHandler(w, r, *configLoaded)
+	}).Methods("POST")
+	v1.HandleFunc("/api-gateway-sql/{datasource}/init", func(w http.ResponseWriter, r *http.Request) {
+		apisql.InitializeDatabaseHandler(w, r, *configLoaded)
+	}).Methods("POST")
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.URL(swaggerUrl),
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("swagger-ui"),
 	)).Methods("GET")
-	router.Use(apisqlInstance.AuthMiddleware)
+	router.Use(func(next http.Handler) http.Handler {
+		return apisql.AuthMiddleware(next, *configLoaded)
+	})
 
 	logging.Log(logging.Info, "server is listening on port %v", strListenPort)
 	if boolEnableHttps {
