@@ -24,8 +24,7 @@ var validate *validator.Validate
 // @contact.name API Support
 // @contact.email ngaswilly77@gmail.com
 // @license.name MIT
-// @license.url https://opensource.org/licenses/MIT
-// @host localhost:5297
+// @license.url https://github.com/willbrid/easy_api_prom_sms_alert/blob/main/LICENSE
 // @BasePath /v1
 // @securityDefinitions.basic BasicAuth
 func main() {
