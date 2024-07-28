@@ -1,6 +1,7 @@
 package apisql
 
 import (
+	"api-gateway-sql/config"
 	"api-gateway-sql/logging"
 	"api-gateway-sql/utils/httputil"
 
@@ -24,11 +25,11 @@ import (
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/{target} [get]
-func (apisql *ApiSql) ApiGetSqlHandler(resp http.ResponseWriter, req *http.Request) {
+func ApiGetSqlHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
 	vars := mux.Vars(req)
 	targetName := vars["target"]
 
-	target, database, err := getTargetAndDatabase(apisql, targetName)
+	target, database, err := getTargetAndDatabase(config, targetName)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, err.Error(), nil)
@@ -36,7 +37,7 @@ func (apisql *ApiSql) ApiGetSqlHandler(resp http.ResponseWriter, req *http.Reque
 	}
 
 	postParams := make(map[string]interface{}, 0)
-	response, err := executeSingleSQLQuery(*target, *database, int(apisql.config.ApiGatewaySQL.Timeout), postParams)
+	response, err := executeSingleSQLQuery(*target, *database, int(config.ApiGatewaySQL.Timeout), postParams)
 	if err != nil {
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
 		return
@@ -58,11 +59,11 @@ func (apisql *ApiSql) ApiGetSqlHandler(resp http.ResponseWriter, req *http.Reque
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/{target} [post]
-func (apisql *ApiSql) ApiPostSqlHandler(resp http.ResponseWriter, req *http.Request) {
+func ApiPostSqlHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
 	vars := mux.Vars(req)
 	targetName := vars["target"]
 
-	target, database, err := getTargetAndDatabase(apisql, targetName)
+	target, database, err := getTargetAndDatabase(config, targetName)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, err.Error(), nil)
@@ -76,7 +77,7 @@ func (apisql *ApiSql) ApiPostSqlHandler(resp http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	response, err := executeSingleSQLQuery(*target, *database, int(apisql.config.ApiGatewaySQL.Timeout), postParams)
+	response, err := executeSingleSQLQuery(*target, *database, int(config.ApiGatewaySQL.Timeout), postParams)
 	if err != nil {
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
 		return
@@ -98,11 +99,11 @@ func (apisql *ApiSql) ApiPostSqlHandler(resp http.ResponseWriter, req *http.Requ
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/{datasource}/init [post]
-func (apisql *ApiSql) InitializeDatabaseHandler(resp http.ResponseWriter, req *http.Request) {
+func InitializeDatabaseHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
 	vars := mux.Vars(req)
 	datasourceName := vars["datasource"]
 
-	database, exist := apisql.config.GetDatabaseByDataSourceName(datasourceName)
+	database, exist := config.GetDatabaseByDataSourceName(datasourceName)
 	if !exist {
 		err := fmt.Sprintf("the configured datasource name %s does not exist", datasourceName)
 		httputil.SendJSONResponse(resp, http.StatusBadRequest, err, nil)
@@ -123,7 +124,7 @@ func (apisql *ApiSql) InitializeDatabaseHandler(resp http.ResponseWriter, req *h
 		return
 	}
 
-	err = executeInitSQLQuery(string(sqlBytes), database, int(apisql.config.ApiGatewaySQL.Timeout))
+	err = executeInitSQLQuery(string(sqlBytes), database, int(config.ApiGatewaySQL.Timeout))
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, "Unable to execute the SQL query", nil)
