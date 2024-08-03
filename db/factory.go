@@ -6,8 +6,10 @@ import (
 	"gorm.io/gorm"
 )
 
-type DBInstance interface {
+type IDatabase interface {
 	Connect(dbConfig config.Database, timeout int) (*gorm.DB, error)
+	ExecuteQuery(query string, params []interface{}) (SelectResult, error)
+	ExecuteBatch(query string, batchSize int, bufferSize int) error
 }
 
 const (
@@ -18,18 +20,19 @@ const (
 	SQLite     string = "sqlite"
 )
 
-func GetDatabaseInstance(dbType string) DBInstance {
+func NewDatabase(dbType string) IDatabase {
 	switch dbType {
 	case Mariadb:
+		return &MariadbDatabase{}
 	case MySQL:
-		return MySQLInstance{}
+		return &MySQLDatabase{}
 	case PostgreSQL:
-		return PostgresInstance{}
+		return &PostgresDatabase{}
 	case Sqlserver:
-		return SqlserverInstance{}
+		return &SqlserverDatabase{}
 	case SQLite:
-		return SqliteInstance{}
+		return &SqliteDatabase{}
+	default:
+		return &SqliteDatabase{}
 	}
-
-	return SqliteInstance{}
 }
