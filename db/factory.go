@@ -8,8 +8,8 @@ import (
 
 type IDatabase interface {
 	Connect(dbConfig config.Database, timeout int) (*gorm.DB, error)
-	ExecuteQuery(query string, params []interface{}) (SelectResult, error)
-	ExecuteBatch(query string, batchSize int, bufferSize int) error
+	ExecuteQuery(sqlQuery string, params map[string]interface{}) (SelectResult, error)
+	ExecuteBatch(sqlQuery string, params []map[string]interface{}) error
 }
 
 const (
