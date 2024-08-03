@@ -9,10 +9,32 @@ import (
 	"gorm.io/gorm"
 )
 
-type SqliteInstance struct{}
+type SqliteDatabase struct {
+	db *gorm.DB
+}
 
-func (i SqliteInstance) Connect(db config.Database, timeout int) (*gorm.DB, error) {
+func (sqliteDB *SqliteDatabase) Connect(db config.Database, timeout int) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s.db", db.Dbname)
 
-	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+	cnx, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+
+	if err == nil {
+		sqliteDB.db = cnx
+	}
+
+	return cnx, err
+}
+
+func (sqliteDB SqliteDatabase) ExecuteQuery(query string, params []interface{}) (SelectResult, error) {
+	result, err := executeQuery(sqliteDB.db, query, params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (sqliteDB SqliteDatabase) ExecuteBatch(query string, batchSize int, bufferSize int) error {
+	return nil
 }

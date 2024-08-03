@@ -9,10 +9,32 @@ import (
 	"gorm.io/gorm"
 )
 
-type SqlserverInstance struct{}
+type SqlserverDatabase struct {
+	db *gorm.DB
+}
 
-func (i SqlserverInstance) Connect(db config.Database, timeout int) (*gorm.DB, error) {
+func (sqlserverDB *SqlserverDatabase) Connect(db config.Database, timeout int) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%v?database=%s&connection+timeout=%v", db.Username, db.Password, db.Host, db.Port, db.Dbname, timeout)
 
-	return gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
+	cnx, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
+
+	if err == nil {
+		sqlserverDB.db = cnx
+	}
+
+	return cnx, err
+}
+
+func (sqlserverDB SqlserverDatabase) ExecuteQuery(query string, params []interface{}) (SelectResult, error) {
+	result, err := executeQuery(sqlserverDB.db, query, params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (sqlserverDB SqlserverDatabase) ExecuteBatch(query string, batchSize int, bufferSize int) error {
+	return nil
 }
