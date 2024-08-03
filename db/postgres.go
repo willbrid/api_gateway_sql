@@ -30,8 +30,8 @@ func (postgresDB *PostgresDatabase) Connect(db config.Database, timeout int) (*g
 	return cnx, err
 }
 
-func (postgresDB PostgresDatabase) ExecuteQuery(query string, params []interface{}) (SelectResult, error) {
-	result, err := executeQuery(postgresDB.db, query, params)
+func (postgresDB PostgresDatabase) ExecuteQuery(sqlQuery string, params map[string]interface{}) (SelectResult, error) {
+	result, err := executeQuery(postgresDB.db, sqlQuery, params)
 
 	if err != nil {
 		return nil, err
@@ -40,6 +40,6 @@ func (postgresDB PostgresDatabase) ExecuteQuery(query string, params []interface
 	return result, nil
 }
 
-func (postgresDB PostgresDatabase) ExecuteBatch(query string, batchSize int, bufferSize int) error {
-	return nil
+func (postgresDB PostgresDatabase) ExecuteBatch(sqlQuery string, params []map[string]interface{}) error {
+	return executeBatch(postgresDB.db, sqlQuery, params)
 }

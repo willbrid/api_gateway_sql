@@ -25,8 +25,8 @@ func (sqlserverDB *SqlserverDatabase) Connect(db config.Database, timeout int) (
 	return cnx, err
 }
 
-func (sqlserverDB SqlserverDatabase) ExecuteQuery(query string, params []interface{}) (SelectResult, error) {
-	result, err := executeQuery(sqlserverDB.db, query, params)
+func (sqlserverDB SqlserverDatabase) ExecuteQuery(sqlQuery string, params map[string]interface{}) (SelectResult, error) {
+	result, err := executeQuery(sqlserverDB.db, sqlQuery, params)
 
 	if err != nil {
 		return nil, err
@@ -35,6 +35,6 @@ func (sqlserverDB SqlserverDatabase) ExecuteQuery(query string, params []interfa
 	return result, nil
 }
 
-func (sqlserverDB SqlserverDatabase) ExecuteBatch(query string, batchSize int, bufferSize int) error {
-	return nil
+func (sqlserverDB SqlserverDatabase) ExecuteBatch(sqlQuery string, params []map[string]interface{}) error {
+	return executeBatch(sqlserverDB.db, sqlQuery, params)
 }

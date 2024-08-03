@@ -25,8 +25,8 @@ func (sqliteDB *SqliteDatabase) Connect(db config.Database, timeout int) (*gorm.
 	return cnx, err
 }
 
-func (sqliteDB SqliteDatabase) ExecuteQuery(query string, params []interface{}) (SelectResult, error) {
-	result, err := executeQuery(sqliteDB.db, query, params)
+func (sqliteDB SqliteDatabase) ExecuteQuery(sqlQuery string, params map[string]interface{}) (SelectResult, error) {
+	result, err := executeQuery(sqliteDB.db, sqlQuery, params)
 
 	if err != nil {
 		return nil, err
@@ -35,6 +35,6 @@ func (sqliteDB SqliteDatabase) ExecuteQuery(query string, params []interface{}) 
 	return result, nil
 }
 
-func (sqliteDB SqliteDatabase) ExecuteBatch(query string, batchSize int, bufferSize int) error {
-	return nil
+func (sqliteDB SqliteDatabase) ExecuteBatch(sqlQuery string, params []map[string]interface{}) error {
+	return executeBatch(sqliteDB.db, sqlQuery, params)
 }

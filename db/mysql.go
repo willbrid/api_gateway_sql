@@ -25,8 +25,8 @@ func (mysqlDB *MySQLDatabase) Connect(db config.Database, timeout int) (*gorm.DB
 	return cnx, err
 }
 
-func (mysqlDB MySQLDatabase) ExecuteQuery(query string, params []interface{}) (SelectResult, error) {
-	result, err := executeQuery(mysqlDB.db, query, params)
+func (mysqlDB MySQLDatabase) ExecuteQuery(sqlQuery string, params map[string]interface{}) (SelectResult, error) {
+	result, err := executeQuery(mysqlDB.db, sqlQuery, params)
 
 	if err != nil {
 		return nil, err
@@ -35,6 +35,6 @@ func (mysqlDB MySQLDatabase) ExecuteQuery(query string, params []interface{}) (S
 	return result, nil
 }
 
-func (mysqlDB MySQLDatabase) ExecuteBatch(query string, batchSize int, bufferSize int) error {
-	return nil
+func (mysqlDB MySQLDatabase) ExecuteBatch(sqlQuery string, params []map[string]interface{}) error {
+	return executeBatch(mysqlDB.db, sqlQuery, params)
 }

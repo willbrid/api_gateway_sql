@@ -25,8 +25,8 @@ func (mariadbDB *MariadbDatabase) Connect(db config.Database, timeout int) (*gor
 	return cnx, err
 }
 
-func (mariadbDB MariadbDatabase) ExecuteQuery(query string, params []interface{}) (SelectResult, error) {
-	result, err := executeQuery(mariadbDB.db, query, params)
+func (mariadbDB MariadbDatabase) ExecuteQuery(sqlQuery string, params map[string]interface{}) (SelectResult, error) {
+	result, err := executeQuery(mariadbDB.db, sqlQuery, params)
 
 	if err != nil {
 		return nil, err
@@ -35,6 +35,6 @@ func (mariadbDB MariadbDatabase) ExecuteQuery(query string, params []interface{}
 	return result, nil
 }
 
-func (mariadbDB MariadbDatabase) ExecuteBatch(query string, batchSize int, bufferSize int) error {
-	return nil
+func (mariadbDB MariadbDatabase) ExecuteBatch(sqlQuery string, params []map[string]interface{}) error {
+	return executeBatch(mariadbDB.db, sqlQuery, params)
 }
