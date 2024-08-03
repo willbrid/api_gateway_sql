@@ -13,29 +13,30 @@ const (
 	Select string = "SELECT"
 )
 
-// ExecuteWithScan used to execute sql query like select
-func ExecuteWithScan(cnx *gorm.DB, sql string, params []interface{}) (SelectResult, error) {
+// executeQuery used to execute a simple non batch query
+func executeQuery(cnx *gorm.DB, sql string, params []interface{}) (SelectResult, error) {
 	var result []map[string]interface{}
+	var sqlQueryType string = getSQLQueryType(sql)
 
-	if err := cnx.Raw(sql, params...).Scan(&result).Error; err != nil {
-		return nil, err
+	switch sqlQueryType {
+	case Select:
+		if err := cnx.Raw(sql, params...).Scan(&result).Error; err != nil {
+			return nil, err
+		}
+
+		return result, nil
+	default:
+		if err := cnx.Exec(sql, params...).Error; err != nil {
+			return nil, err
+		}
+
+		return nil, nil
 	}
-
-	return result, nil
-}
-
-// ExecuteWithExec used to execute sql query like insert, update, delete
-func ExecuteWithExec(cnx *gorm.DB, sql string, params []interface{}) error {
-	if err := cnx.Exec(sql, params...).Error; err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // GetQuerySQLType used to get the base type (select, insert, update, delete,...) of a sql query
-func GetSQLQueryType(sql string) string {
-	return strings.ToUpper(strings.SplitN(sql, " ", 2)[0])
+func getSQLQueryType(sql string) string {
+	return strings.ToUpper(strings.SplitN(strings.TrimLeft(sql, " "), " ", 2)[0])
 }
 
 // TransformQuery used to parse query from config target
