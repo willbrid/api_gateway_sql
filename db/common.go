@@ -35,6 +35,7 @@ func executeQuery(cnx *gorm.DB, sqlQuery string, params map[string]interface{}) 
 	}
 }
 
+// executeBatch used to batch sql query
 func executeBatch(cnx *gorm.DB, sqlQuery string, params []map[string]interface{}) error {
 	return cnx.Transaction(func(tx *gorm.DB) error {
 		for _, param := range params {
