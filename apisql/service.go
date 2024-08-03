@@ -31,7 +31,7 @@ func executeSingleSQLQuery(target config.Target, database config.Database, timeo
 		err    error           = nil
 	)
 
-	dbInstance := db.GetDatabaseInstance(database.Type)
+	dbInstance := db.NewDatabase(database.Type)
 	cnx, err = dbInstance.Connect(database, timeout)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
@@ -42,21 +42,9 @@ func executeSingleSQLQuery(target config.Target, database config.Database, timeo
 		dbCnx.Close()
 	}()
 
-	sqlQueryType := db.GetSQLQueryType(target.SqlQuery)
 	parsedQuery, params := db.TransformQuery(target.SqlQuery, postParams)
 
-	switch sqlQueryType {
-	case db.Select:
-		result, err = db.ExecuteWithScan(cnx, parsedQuery, params)
-		if err != nil {
-			logging.Log(logging.Error, err.Error())
-		}
-	default:
-		err = db.ExecuteWithExec(cnx, parsedQuery, params)
-		if err != nil {
-			logging.Log(logging.Error, err.Error())
-		}
-	}
+	result, err = dbInstance.ExecuteQuery(parsedQuery, params)
 
 	return result, err
 }
@@ -67,7 +55,7 @@ func executeInitSQLQuery(sql string, database config.Database, timeout int) erro
 		err error = nil
 	)
 
-	dbInstance := db.GetDatabaseInstance(database.Type)
+	dbInstance := db.NewDatabase(database.Type)
 	cnx, err = dbInstance.Connect(database, timeout)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
@@ -78,7 +66,7 @@ func executeInitSQLQuery(sql string, database config.Database, timeout int) erro
 		dbCnx.Close()
 	}()
 
-	err = db.ExecuteWithExec(cnx, sql, make([]interface{}, 0))
+	_, err = dbInstance.ExecuteQuery(sql, make([]interface{}, 0))
 
 	return err
 }
