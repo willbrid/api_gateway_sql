@@ -111,10 +111,10 @@ api_gateway_sql:
 	}
 }
 
-func TestTimeoutField(t *testing.T) {
+func TestSqlitedbField(t *testing.T) {
 	configContent := `---
 api_gateway_sql:
-  timeout: ''
+  sqlitedb: ''
 `
 
 	filename, err := file.CreateConfigFileForTesting(configContent)
@@ -138,7 +138,7 @@ func TestDabatasesField(t *testing.T) {
 	configSlices := []string{
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -146,7 +146,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -155,7 +155,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -165,7 +165,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -175,7 +175,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -186,7 +186,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -197,7 +197,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -209,7 +209,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -221,7 +221,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -234,7 +234,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -247,7 +247,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -260,7 +260,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -274,7 +274,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -289,7 +289,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -302,6 +302,39 @@ api_gateway_sql:
     username: "xxxxx"
     password: "xxxxx"
     dbname: ""
+`,
+		`---
+api_gateway_sql:
+  sqlitedb: "/data/api_gateway_sql"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: "3306"
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+`,
+		`---
+api_gateway_sql:
+  sqlitedb: "/data/api_gateway_sql"
+  auth:
+    enabled: true
+    username: "xxxxx"
+    password: xxxxxxxx
+  databases:
+  - name: "xxxxx"
+    type: "mariadb"
+    host: "127.0.0.1"
+    port: "3306"
+    username: "xxxxx"
+    password: "xxxxx"
+    dbname: "xxxxx"
+    timeout: "10"
 `,
 	}
 
@@ -320,7 +353,8 @@ api_gateway_sql:
 		"validation failed on field 'Username' for condition 'required_unless'",
 		"validation failed on field 'Password' for condition 'required_unless'",
 		"validation failed on field 'Dbname' for condition 'required'",
-		"",
+		"validation failed on field 'Timeout' for condition 'required'",
+		"1 error(s) decoding:\n\n* error decoding 'api_gateway_sql.databases[0].timeout': time: missing unit in duration \"10\"",
 	}
 
 	for index, configContent := range configSlices {
@@ -350,7 +384,7 @@ func TestTargetsField(t *testing.T) {
 	configSlices := []string{
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -364,10 +398,11 @@ api_gateway_sql:
     password: "xxxxx"
     dbname: "xxxxx"
     sslmode: false
+    timeout: "10s"
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -381,11 +416,12 @@ api_gateway_sql:
     password: "xxxxx"
     dbname: "xxxxx"
     sslmode: false
+    timeout: "10s"
   targets:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -399,12 +435,13 @@ api_gateway_sql:
     password: "xxxxx"
     dbname: "xxxxx"
     sslmode: false
+    timeout: "10s"
   targets:
   - name: ""
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -418,12 +455,13 @@ api_gateway_sql:
     password: "xxxxx"
     dbname: "xxxxx"
     sslmode: false
+    timeout: "10s"
   targets:
   - name: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -437,13 +475,14 @@ api_gateway_sql:
     password: "xxxxx"
     dbname: "xxxxx"
     sslmode: false
+    timeout: "10s"
   targets:
   - name: "xxxxx"
     data_source_name: ""
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -457,6 +496,7 @@ api_gateway_sql:
     password: "xxxxx"
     dbname: "xxxxx"
     sslmode: false
+    timeout: "10s"
   targets:
   - name: "xxxxx"
     data_source_name: "xxxxx"
@@ -464,7 +504,7 @@ api_gateway_sql:
 `,
 		`---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -478,6 +518,7 @@ api_gateway_sql:
     password: "xxxxx"
     dbname: "xxxxx"
     sslmode: false
+    timeout: "10s"
   targets:
   - name: "xxxxx"
     data_source_name: "xxxxx"
