@@ -1,4 +1,5 @@
 api_gateway_sql:
+  sqlitedb: "/data/api_gateway_sql"
   timeout: 10s
   auth:
     enabled: true
