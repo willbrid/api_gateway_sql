@@ -93,7 +93,7 @@ func main() {
 		apisql.ApiPostSqlBatchHandler(w, r, *configLoaded)
 	}).Methods("POST")
 	v1.HandleFunc("/api-gateway-sql/{target}/batch", func(w http.ResponseWriter, r *http.Request) {
-		apisql.ApiGetStatsHandler(w, r)
+		apisql.ApiGetStatsHandler(w, r, *configLoaded)
 	}).Methods("GET")
 	v1.HandleFunc("/api-gateway-sql/{datasource}/init", func(w http.ResponseWriter, r *http.Request) {
 		apisql.InitializeDatabaseHandler(w, r, *configLoaded)
