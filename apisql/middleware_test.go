@@ -17,7 +17,7 @@ var validate *validator.Validate = validator.New(validator.WithRequiredStructEna
 
 const configContent string = `---
 api_gateway_sql:
-  timeout: "10s"
+  sqlitedb: "/data/api_gateway_sql"
   auth:
     enabled: true
     username: "xxxxx"
@@ -26,6 +26,7 @@ api_gateway_sql:
   - name: "xxxxx"
     type: "sqlite"
     dbname: "/tmp/xxxxx"
+    timeout: "10s"
   targets:
   - name: xxxxx
     data_source_name: xxxxx
