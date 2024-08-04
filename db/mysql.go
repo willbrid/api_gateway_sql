@@ -13,8 +13,8 @@ type MySQLDatabase struct {
 	db *gorm.DB
 }
 
-func (mysqlDB *MySQLDatabase) Connect(db config.Database, timeout int) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True&loc=Local&timeout=%vs", db.Username, db.Password, db.Host, db.Port, db.Dbname, timeout)
+func (mysqlDB *MySQLDatabase) Connect(db config.Database) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True&loc=Local&timeout=%vs", db.Username, db.Password, db.Host, db.Port, db.Dbname, db.Timeout)
 
 	cnx, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 

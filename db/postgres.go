@@ -13,13 +13,13 @@ type PostgresDatabase struct {
 	db *gorm.DB
 }
 
-func (postgresDB *PostgresDatabase) Connect(db config.Database, timeout int) (*gorm.DB, error) {
+func (postgresDB *PostgresDatabase) Connect(db config.Database) (*gorm.DB, error) {
 	sslMode := "disable"
 	if db.Sslmode {
 		sslMode = "enable"
 	}
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%v sslmode=%v connect_timeout=%v", db.Host, db.Username, db.Password, db.Dbname, db.Host, sslMode, timeout)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%v sslmode=%v connect_timeout=%v", db.Host, db.Username, db.Password, db.Dbname, db.Host, sslMode, db.Timeout)
 
 	cnx, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 

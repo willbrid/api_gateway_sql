@@ -13,8 +13,8 @@ type SqlserverDatabase struct {
 	db *gorm.DB
 }
 
-func (sqlserverDB *SqlserverDatabase) Connect(db config.Database, timeout int) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%v?database=%s&connection+timeout=%v", db.Username, db.Password, db.Host, db.Port, db.Dbname, timeout)
+func (sqlserverDB *SqlserverDatabase) Connect(db config.Database) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%v?database=%s&connection+timeout=%v", db.Username, db.Password, db.Host, db.Port, db.Dbname, db.Timeout)
 
 	cnx, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 

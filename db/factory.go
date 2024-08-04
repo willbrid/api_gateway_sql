@@ -7,7 +7,7 @@ import (
 )
 
 type IDatabase interface {
-	Connect(dbConfig config.Database, timeout int) (*gorm.DB, error)
+	Connect(dbConfig config.Database) (*gorm.DB, error)
 	ExecuteQuery(sqlQuery string, params map[string]interface{}) (SelectResult, error)
 	ExecuteBatch(sqlQuery string, params []map[string]interface{}) error
 }
