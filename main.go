@@ -3,6 +3,7 @@ package main
 import (
 	"api-gateway-sql/apisql"
 	"api-gateway-sql/config"
+	"api-gateway-sql/db/stat"
 	_ "api-gateway-sql/docs"
 	"api-gateway-sql/logging"
 
@@ -56,6 +57,16 @@ func main() {
 		return
 	}
 	logging.Log(logging.Info, "configuration file '%s' was loaded successfully", configFile)
+
+	// Execute automigration in database
+	cnx, err := stat.Connect(configLoaded.ApiGatewaySQL.Sqlitedb)
+	if err != nil {
+		logging.Log(logging.Error, err.Error())
+		return
+	}
+	cnx.AutoMigrate(&stat.BatchStatistic{}, &stat.FailureRange{})
+	dbCnx, _ := cnx.DB()
+	dbCnx.Close()
 
 	strListenPort := strconv.Itoa(listenPort)
 	boolEnableHttps, errParse := strconv.ParseBool(enableHttps)
