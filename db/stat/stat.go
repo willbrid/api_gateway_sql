@@ -107,6 +107,10 @@ func GetBatchStatistics(sqlitedb string, pageNum int, pageSize int) ([]BatchStat
 	}()
 
 	err = cnx.Model(&BatchStatistic{}).Preload("FailureRanges").Find(&batchStatistics).Offset(pageNum).Limit(pageSize).Error
+	if err != nil {
+		logging.Log(logging.Error, err.Error())
+		return nil, err
+	}
 
 	return batchStatistics, err
 }
