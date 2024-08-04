@@ -36,8 +36,8 @@ type FailureRange struct {
 	BatchStatisticID string
 }
 
-func NewBatchStatistic(targetName string) BatchStatistic {
-	return BatchStatistic{
+func NewBatchStatistic(targetName string) *BatchStatistic {
+	return &BatchStatistic{
 		ID:         uuid.GenerateUID(),
 		CreatedAt:  time.Now(),
 		TargetName: targetName,
