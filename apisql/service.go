@@ -173,7 +173,7 @@ func mapBatchFieldToValueLine(fields []string, values []string) (map[string]inte
 		return nil, fmt.Errorf("bad mapping fields and file column")
 	}
 
-	var result map[string]interface{}
+	var result map[string]interface{} = make(map[string]interface{}, len(fields))
 
 	for index, field := range fields {
 		result[field] = values[index]
