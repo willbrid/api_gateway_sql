@@ -2,14 +2,18 @@ package apisql
 
 import (
 	"api-gateway-sql/config"
+	"api-gateway-sql/db"
+	"api-gateway-sql/db/stat"
 	"api-gateway-sql/logging"
 	"api-gateway-sql/utils/httputil"
-	"strconv"
 
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
+	"net/url"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -26,11 +30,17 @@ import (
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/{target} [get]
-func ApiGetSqlHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
-	vars := mux.Vars(req)
-	targetName := vars["target"]
+func ApiGetSqlHandler(resp http.ResponseWriter, req *http.Request, configLoaded config.Config) {
+	var (
+		vars       map[string]string = mux.Vars(req)
+		targetName string            = vars["target"]
+		err        error
+		target     *config.Target
+		database   *config.Database
+		response   db.SelectResult
+	)
 
-	target, database, err := getTargetAndDatabase(config, targetName)
+	target, database, err = getTargetAndDatabase(configLoaded, targetName)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, err.Error(), nil)
@@ -38,7 +48,7 @@ func ApiGetSqlHandler(resp http.ResponseWriter, req *http.Request, config config
 	}
 
 	postParams := make(map[string]interface{}, 0)
-	response, err := executeSingleSQLQuery(*target, *database, int(config.ApiGatewaySQL.Timeout), postParams)
+	response, err = executeSingleSQLQuery(*target, *database, postParams)
 	if err != nil {
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
 		return
@@ -60,11 +70,17 @@ func ApiGetSqlHandler(resp http.ResponseWriter, req *http.Request, config config
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/{target} [post]
-func ApiPostSqlHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
-	vars := mux.Vars(req)
-	targetName := vars["target"]
+func ApiPostSqlHandler(resp http.ResponseWriter, req *http.Request, configLoaded config.Config) {
+	var (
+		vars       map[string]string = mux.Vars(req)
+		targetName string            = vars["target"]
+		err        error
+		target     *config.Target
+		database   *config.Database
+		response   db.SelectResult
+	)
 
-	target, database, err := getTargetAndDatabase(config, targetName)
+	target, database, err = getTargetAndDatabase(configLoaded, targetName)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, err.Error(), nil)
@@ -78,7 +94,7 @@ func ApiPostSqlHandler(resp http.ResponseWriter, req *http.Request, config confi
 		return
 	}
 
-	response, err := executeSingleSQLQuery(*target, *database, int(config.ApiGatewaySQL.Timeout), postParams)
+	response, err = executeSingleSQLQuery(*target, *database, postParams)
 	if err != nil {
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
 		return
@@ -100,23 +116,37 @@ func ApiPostSqlHandler(resp http.ResponseWriter, req *http.Request, config confi
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/{target}/batch [post]
-func ApiPostSqlBatchHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
-	vars := mux.Vars(req)
-	targetName := vars["target"]
+func ApiPostSqlBatchHandler(resp http.ResponseWriter, req *http.Request, configLoaded config.Config) {
+	var (
+		vars       map[string]string = mux.Vars(req)
+		targetName string            = vars["target"]
+		err        error
+		postFile   multipart.File
+		target     *config.Target
+		database   *config.Database
+	)
 
-	_, _, err := getTargetAndDatabase(config, targetName)
+	target, database, err = getTargetAndDatabase(configLoaded, targetName)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
-	_, _, err = req.FormFile("csvfile")
+	postFile, _, err = req.FormFile("csvfile")
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusBadRequest, "Unable to read the SQL file", nil)
 		return
 	}
+
+	go func() {
+		err = executeBatchSQLQuery(configLoaded.ApiGatewaySQL.Sqlitedb, *target, *database, postFile)
+		if err != nil {
+			logging.Log(logging.Error, err.Error())
+			return
+		}
+	}()
 
 	httputil.SendJSONResponse(resp, http.StatusOK, httputil.HTTPStatusOKMessage, nil)
 }
@@ -134,28 +164,36 @@ func ApiPostSqlBatchHandler(resp http.ResponseWriter, req *http.Request, config 
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/stats [get]
-func ApiGetStatsHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
-	queries := req.URL.Query()
-	pageNum, err := strconv.Atoi(queries.Get("page_num"))
+func ApiGetStatsHandler(resp http.ResponseWriter, req *http.Request, configLoaded config.Config) {
+	var (
+		queries   url.Values = req.URL.Query()
+		pageNum   int
+		pageSize  int
+		err       error
+		stats     []stat.BatchStatistic
+		jsonStats []byte
+	)
+
+	pageNum, err = strconv.Atoi(queries.Get("page_num"))
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusBadRequest, "Unable to handle page_num", nil)
 		return
 	}
-	pageSize, err := strconv.Atoi(queries.Get("page_size"))
+	pageSize, err = strconv.Atoi(queries.Get("page_size"))
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusBadRequest, "Unable to handle page_size", nil)
 		return
 	}
 
-	stats, err := getStats(config.ApiGatewaySQL.Sqlitedb, pageNum, pageSize)
+	stats, err = getStats(configLoaded.ApiGatewaySQL.Sqlitedb, pageNum, pageSize)
 	if err != nil {
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
 		return
 	}
 
-	jsonStats, err := json.Marshal(stats)
+	jsonStats, err = json.Marshal(stats)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
@@ -178,32 +216,39 @@ func ApiGetStatsHandler(resp http.ResponseWriter, req *http.Request, config conf
 // @Failure      500  {object}  httputil.HTTPResp
 // @Security     BasicAuth
 // @Router       /api-gateway-sql/{datasource}/init [post]
-func InitializeDatabaseHandler(resp http.ResponseWriter, req *http.Request, config config.Config) {
-	vars := mux.Vars(req)
-	datasourceName := vars["datasource"]
+func InitializeDatabaseHandler(resp http.ResponseWriter, req *http.Request, configLoaded config.Config) {
+	var (
+		vars           map[string]string = mux.Vars(req)
+		datasourceName string            = vars["datasource"]
+		err            error
+		database       config.Database
+		exist          bool
+		file           multipart.File
+		sqlBytes       []byte
+	)
 
-	database, exist := config.GetDatabaseByDataSourceName(datasourceName)
+	database, exist = configLoaded.GetDatabaseByDataSourceName(datasourceName)
 	if !exist {
 		err := fmt.Sprintf("the configured datasource name %s does not exist", datasourceName)
 		httputil.SendJSONResponse(resp, http.StatusBadRequest, err, nil)
 		return
 	}
 
-	file, _, err := req.FormFile("sqlfile")
+	file, _, err = req.FormFile("sqlfile")
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusBadRequest, "Unable to read the SQL file", nil)
 		return
 	}
 
-	sqlBytes, err := io.ReadAll(file)
+	sqlBytes, err = io.ReadAll(file)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusBadRequest, "Unable to read the SQL file content", nil)
 		return
 	}
 
-	err = executeInitSQLQuery(string(sqlBytes), database, int(config.ApiGatewaySQL.Timeout))
+	err = executeInitSQLQuery(string(sqlBytes), database)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		httputil.SendJSONResponse(resp, http.StatusInternalServerError, "Unable to execute the SQL query", nil)
