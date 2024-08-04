@@ -25,14 +25,15 @@ type BatchStatistic struct {
 	FailureCount  int            `json:"failure" gorm:"default:0"`
 	CreatedAt     time.Time      `json:"created_at"`
 	UpdatedAt     time.Time      `json:"updated_at"`
-	FailureRanges []FailureRange `json:"failure_ranges"`
+	FailureRanges []FailureRange `json:"failure_ranges" gorm:"foreignKey:BatchStatisticID"`
 }
 
 type FailureRange struct {
-	ID        string    `json:"id"`
-	StartLine int       `json:"start_line"`
-	EndLine   int       `json:"end_line"`
-	CreatedAt time.Time `json:"created_at"`
+	ID               string    `json:"id"`
+	StartLine        int       `json:"start_line"`
+	EndLine          int       `json:"end_line"`
+	CreatedAt        time.Time `json:"created_at"`
+	BatchStatisticID string
 }
 
 func NewBatchStatistic(targetName string) BatchStatistic {
