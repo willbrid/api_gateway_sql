@@ -3,6 +3,7 @@ package main
 import (
 	"api-gateway-sql/apisql"
 	"api-gateway-sql/config"
+	"api-gateway-sql/db/stat"
 	_ "api-gateway-sql/docs"
 	"api-gateway-sql/logging"
 
@@ -16,7 +17,10 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
-var validate *validator.Validate
+var (
+	validate *validator.Validate
+	stats    []stat.BatchStatistic = make([]stat.BatchStatistic, 0)
+)
 
 // @title API GATEWAY SQL
 // @version 1.0.0
@@ -78,6 +82,12 @@ func main() {
 	v1.HandleFunc("/api-gateway-sql/{target}", func(w http.ResponseWriter, r *http.Request) {
 		apisql.ApiPostSqlHandler(w, r, *configLoaded)
 	}).Methods("POST")
+	v1.HandleFunc("/api-gateway-sql/{target}/batch", func(w http.ResponseWriter, r *http.Request) {
+		apisql.ApiPostSqlBatchHandler(w, r, *configLoaded, stats)
+	}).Methods("POST")
+	v1.HandleFunc("/api-gateway-sql/{target}/batch", func(w http.ResponseWriter, r *http.Request) {
+		apisql.ApiGetStatsHandler(w, r, stats)
+	}).Methods("GET")
 	v1.HandleFunc("/api-gateway-sql/{datasource}/init", func(w http.ResponseWriter, r *http.Request) {
 		apisql.InitializeDatabaseHandler(w, r, *configLoaded)
 	}).Methods("POST")
