@@ -1,13 +1,18 @@
 package file
 
 import (
-	"api-gateway-sql/logging"
-
 	"encoding/csv"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"os"
 )
+
+type Buffer struct {
+	StartLine int
+	EndLine   int
+	Lines     [][]string
+}
 
 func CreateConfigFileForTesting(configContent string) (string, error) {
 	configFile, err := os.CreateTemp("", "testconfig-*.yaml")
@@ -24,24 +29,21 @@ func CreateConfigFileForTesting(configContent string) (string, error) {
 	return configFile.Name(), nil
 }
 
-func ReadCSVInBuffer(filePath string, bufferSize int) ([][][]string, error) {
+func ReadCSVInBuffer(file multipart.File, bufferSize int) ([]Buffer, error) {
 	var (
-		buffers [][][]string
-		file    *os.File
-		err     error = nil
+		buffers []Buffer
+		buffer  Buffer
 	)
 
-	file, err = os.Open(filePath)
-	if err != nil {
-		logging.Log(logging.Error, err.Error())
-		return nil, err
-	}
-	defer file.Close()
-
 	reader := csv.NewReader(file)
+	numLine := 0
 
 	for {
-		buffer := make([][]string, bufferSize)
+		buffer = Buffer{
+			StartLine: bufferSize*numLine + 1,
+			EndLine:   bufferSize * (numLine + 1),
+			Lines:     make([][]string, bufferSize),
+		}
 
 		for i := 0; i < bufferSize; i++ {
 			record, err := reader.Read()
@@ -51,14 +53,15 @@ func ReadCSVInBuffer(filePath string, bufferSize int) ([][][]string, error) {
 			if err != nil {
 				return nil, err
 			}
-			buffer = append(buffer, record)
+			buffer.Lines = append(buffer.Lines, record)
 		}
 
-		if len(buffer) == 0 {
+		if len(buffer.Lines) == 0 {
 			break
 		}
 
 		buffers = append(buffers, buffer)
+		numLine++
 	}
 
 	return buffers, nil
