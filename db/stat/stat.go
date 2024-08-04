@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func connect(sqlitedb string) (*gorm.DB, error) {
+func Connect(sqlitedb string) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s.db", sqlitedb)
 
 	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
@@ -44,7 +44,7 @@ func NewBatchStatistic(targetName string) BatchStatistic {
 }
 
 func AddBatchStatistic(sqlitedb string, bs *BatchStatistic) error {
-	cnx, err := connect(sqlitedb)
+	cnx, err := Connect(sqlitedb)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		return err
@@ -58,7 +58,7 @@ func AddBatchStatistic(sqlitedb string, bs *BatchStatistic) error {
 }
 
 func UpdateBatchStatistic(sqlitedb string, bs *BatchStatistic, isSuccess bool, failureStartLine int, failureEndLine int) (*BatchStatistic, error) {
-	cnx, err := connect(sqlitedb)
+	cnx, err := Connect(sqlitedb)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		return nil, err
@@ -96,7 +96,7 @@ func GetBatchStatistics(sqlitedb string, pageNum int, pageSize int) ([]BatchStat
 		err             error
 	)
 
-	cnx, err = connect(sqlitedb)
+	cnx, err = Connect(sqlitedb)
 	if err != nil {
 		logging.Log(logging.Error, err.Error())
 		return nil, err
