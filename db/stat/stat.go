@@ -24,3 +24,10 @@ func NewBatchStatistic(targetName string) BatchStatistic {
 		TargetName:     targetName,
 	}
 }
+
+func (bs *BatchStatistic) UpdateBatchStatistic(successCount int, failureCount int, failureRanges []string) {
+	bs.SuccessCount = successCount
+	bs.FailureCount = failureCount
+	bs.FailureRanges = failureRanges
+	bs.EndTimestamp = time.Now()
+}
