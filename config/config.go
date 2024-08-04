@@ -17,14 +17,15 @@ type Auth struct {
 }
 
 type Database struct {
-	Name     string `mapstructure:"name" validate:"required,max=25"`
-	Type     string `mapstructure:"type" validate:"required,oneof=mariadb mysql postgres sqlserver sqlite"`
-	Host     string `mapstructure:"host" validate:"required_unless=Type sqlite,omitempty,ipv4"`
-	Port     int    `mapstructure:"port" validate:"required_unless=Type sqlite,omitempty,min=1024,max=49151"`
-	Username string `mapstructure:"username" validate:"required_unless=Type sqlite"`
-	Password string `mapstructure:"password" validate:"required_unless=Type sqlite"`
-	Dbname   string `mapstructure:"dbname" validate:"required"`
-	Sslmode  bool   `mapstructure:"sslmode"`
+	Name     string        `mapstructure:"name" validate:"required,max=25"`
+	Type     string        `mapstructure:"type" validate:"required,oneof=mariadb mysql postgres sqlserver sqlite"`
+	Host     string        `mapstructure:"host" validate:"required_unless=Type sqlite,omitempty,ipv4"`
+	Port     int           `mapstructure:"port" validate:"required_unless=Type sqlite,omitempty,min=1024,max=49151"`
+	Username string        `mapstructure:"username" validate:"required_unless=Type sqlite"`
+	Password string        `mapstructure:"password" validate:"required_unless=Type sqlite"`
+	Dbname   string        `mapstructure:"dbname" validate:"required"`
+	Sslmode  bool          `mapstructure:"sslmode"`
+	Timeout  time.Duration `mapstructure:"timeout" validate:"required"`
 }
 
 type Target struct {
@@ -39,8 +40,7 @@ type Target struct {
 
 type Config struct {
 	ApiGatewaySQL struct {
-		Sqlitedb  string        `mapstructure:"sqlitedb" validate:"required"`
-		Timeout   time.Duration `mapstructure:"timeout" validate:"required"`
+		Sqlitedb  string `mapstructure:"sqlitedb" validate:"required"`
 		Auth      `mapstructure:"auth"`
 		Databases []Database `mapstructure:"databases" validate:"gt=0,required,dive"`
 		Targets   []Target   `mapstructure:"targets" validate:"gt=0,required,dive"`
@@ -49,7 +49,6 @@ type Config struct {
 
 func setConfigDefaults(v *viper.Viper) {
 	v.SetDefault("api_gateway_sql.sqlitedb", "/data/api_gateway_sql")
-	v.SetDefault("api_gateway_sql.timeout", "10s")
 	v.SetDefault("api_gateway_sql.auth.enabled", false)
 	v.SetDefault("api_gateway_sql.auth.username", "")
 	v.SetDefault("api_gateway_sql.auth.password", "")
