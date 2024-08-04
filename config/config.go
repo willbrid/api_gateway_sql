@@ -33,11 +33,13 @@ type Target struct {
 	Multi          bool   `mapstructure:"multi"`
 	BatchSize      int    `mapstructure:"batch_size" validate:"required_if=Multi true"`
 	BufferSize     int    `mapstructure:"buffer_size" validate:"required_if=Multi true"`
+	BatchFields    string `mapstructure:"batch_fields" validate:"required_if=Multi true"`
 	SqlQuery       string `mapstructure:"sql" validate:"required"`
 }
 
 type Config struct {
 	ApiGatewaySQL struct {
+		Sqlitedb  string        `mapstructure:"sqlitedb" validate:"required"`
 		Timeout   time.Duration `mapstructure:"timeout" validate:"required"`
 		Auth      `mapstructure:"auth"`
 		Databases []Database `mapstructure:"databases" validate:"gt=0,required,dive"`
@@ -46,6 +48,7 @@ type Config struct {
 }
 
 func setConfigDefaults(v *viper.Viper) {
+	v.SetDefault("api_gateway_sql.sqlitedb", "/data/api_gateway_sql")
 	v.SetDefault("api_gateway_sql.timeout", "10s")
 	v.SetDefault("api_gateway_sql.auth.enabled", false)
 	v.SetDefault("api_gateway_sql.auth.username", "")
