@@ -19,7 +19,7 @@ info:
     name: MIT
     url: https://github.com/willbrid/easy_api_prom_sms_alert/blob/main/LICENSE
   title: API GATEWAY SQL
-  version: 1.0.0
+  version: 0.0.1
 paths:
   /api-gateway-sql/{datasource}/init:
     post:
