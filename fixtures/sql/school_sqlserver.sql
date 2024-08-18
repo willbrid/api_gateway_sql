@@ -31,16 +31,24 @@ CREATE TABLE student (
     FOREIGN KEY (school_id) REFERENCES school(id)
 );
 
+SET IDENTITY_INSERT school ON;
 INSERT INTO school (id, name, address) VALUES (1, 'Greenwood High', '123 Elm Street');
 INSERT INTO school (id, name, address) VALUES (2, 'Sunnydale School', '456 Oak Avenue');
+SET IDENTITY_INSERT school OFF;
 
+SET IDENTITY_INSERT teacher ON;
 INSERT INTO teacher (id, name, email, school_id) VALUES (1, 'John Doe', 'johndoe@greenwood.com', 1);
 INSERT INTO teacher (id, name, email, school_id) VALUES (2, 'Jane Smith', 'janesmith@sunnydale.com', 2);
+SET IDENTITY_INSERT teacher OFF;
 
+SET IDENTITY_INSERT class ON;
 INSERT INTO class (id, name, teacher_id, school_id) VALUES (1, 'Math 101', 1, 1);
 INSERT INTO class (id, name, teacher_id, school_id) VALUES (2, 'Science 101', 2, 2);
+SET IDENTITY_INSERT class OFF;
 
+SET IDENTITY_INSERT student ON;
 INSERT INTO student (id, name, age, class_id, school_id) VALUES (1, 'Alice', 15, 1, 1);
 INSERT INTO student (id, name, age, class_id, school_id) VALUES (2, 'Bob', 16, 1, 1);
 INSERT INTO student (id, name, age, class_id, school_id) VALUES (3, 'Charlie', 17, 2, 2);
 INSERT INTO student (id, name, age, class_id, school_id) VALUES (4, 'Diana', 16, 2, 2);
+SET IDENTITY_INSERT student OFF;
