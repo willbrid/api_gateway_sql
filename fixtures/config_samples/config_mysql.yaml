@@ -1,0 +1,33 @@
+api_gateway_sql:
+  sqlitedb: "/tmp/api_gateway_sql"
+  auth:
+    enabled: true
+    username: test
+    password: test@test
+  databases:
+  - name: school
+    type: mysql
+    host: "@HOST_IP"
+    port: 3306
+    username: "test"
+    password: "test"
+    dbname: "school"
+    sslmode: false
+    timeout: 1s
+  targets:
+  - name: list-student
+    data_source_name: school
+    multi: false
+    sql: "select * from student"
+  - name: find-one-student
+    data_source_name: school
+    multi: false
+    sql: "select * from student where id = {{id}}"
+  - name: find-student-with-cond
+    data_source_name: school
+    multi: false
+    sql: "select * from student where class_id = {{class}} and school_id = {{school}} and age >= {{age}}"
+  - name: insert_student
+    data_source_name: school
+    multi: false
+    sql: "insert into school (id, name, address) values ({{id}}, {{name}}, {{address}})"
