@@ -200,7 +200,7 @@ func executeInitSQLQuery(sqlQuery string, database config.Database) error {
 		dbCnx.Close()
 	}()
 
-	_, err = dbInstance.ExecuteQuery(sqlQuery, make(map[string]interface{}, 0))
+	queries := strings.Split(sqlQuery, ";")
 
-	return err
+	return db.ExecuteTransaction(cnx, queries)
 }
