@@ -49,6 +49,21 @@ func executeBatch(cnx *gorm.DB, sqlQuery string, params []map[string]interface{}
 	})
 }
 
+func ExecuteTransaction(cnx *gorm.DB, sqlQueries []string) error {
+	return cnx.Transaction(func(tx *gorm.DB) error {
+		for _, sqlQuery := range sqlQueries {
+			query := strings.TrimSpace(sqlQuery)
+			if query != "" {
+				if err := tx.Exec(query).Error; err != nil {
+					return err
+				}
+			}
+		}
+
+		return nil
+	})
+}
+
 // getQuerySQLType used to get the base type (select, insert, update, delete,...) of a sql query
 func getSQLQueryType(sqlQuery string) string {
 	return strings.ToUpper(strings.SplitN(strings.TrimLeft(sqlQuery, " "), " ", 2)[0])
