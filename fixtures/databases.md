@@ -47,3 +47,15 @@ ou
 ```
 podman run -d --name school_sqlserver --hostname school -p 1433:1433 -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=test@Test" mcr.microsoft.com/mssql/server:2022-latest
 ```
+
+création de la base de données **school** sur notre instance **sqlserver**
+
+```
+docker exec -it school_sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P test@Test -C -Q "create database school;"
+```
+
+ou 
+
+```
+podman exec -it school_sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P test@Test -C -Q "create database school;"
+```
