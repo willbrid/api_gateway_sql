@@ -6,6 +6,7 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
+	"strings"
 )
 
 type Buffer struct {
@@ -51,7 +52,7 @@ func ReadCSVInBuffer(file multipart.File, bufferSize int) ([]Buffer, error) {
 			if err != nil {
 				return nil, err
 			}
-			buffer.Lines = append(buffer.Lines, record)
+			buffer.Lines = append(buffer.Lines, strings.Split(record[0], ";"))
 		}
 
 		if len(buffer.Lines) == 0 {
