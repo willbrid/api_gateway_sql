@@ -49,6 +49,7 @@ func executeBatch(cnx *gorm.DB, sqlQuery string, params []map[string]interface{}
 	})
 }
 
+// ExecuteTransaction used to Execute a transaction with multiple queries
 func ExecuteTransaction(cnx *gorm.DB, sqlQueries []string) error {
 	return cnx.Transaction(func(tx *gorm.DB) error {
 		for _, sqlQuery := range sqlQueries {
