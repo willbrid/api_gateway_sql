@@ -47,6 +47,7 @@ type Config struct {
 	} `mapstructure:"api_gateway_sql"`
 }
 
+// setConfigDefaults used to set default configuration
 func setConfigDefaults(v *viper.Viper) {
 	v.SetDefault("api_gateway_sql.sqlitedb", "/data/api_gateway_sql")
 	v.SetDefault("api_gateway_sql.auth.enabled", false)
@@ -56,6 +57,7 @@ func setConfigDefaults(v *viper.Viper) {
 	v.SetDefault("api_gateway_sql.targets", make([]Target, 0))
 }
 
+// LoadConfig used to load configuration file
 func LoadConfig(filename string, validate *validator.Validate) (*Config, error) {
 	viper.SetConfigType("yaml")
 	viper.SetConfigFile(filename)
@@ -95,6 +97,7 @@ func LoadConfig(filename string, validate *validator.Validate) (*Config, error) 
 	return &config, nil
 }
 
+// GetTargetByName is a method of Config struct for retreive target by his name
 func (config *Config) GetTargetByName(targetName string) (Target, bool) {
 	var (
 		target Target
@@ -112,6 +115,7 @@ func (config *Config) GetTargetByName(targetName string) (Target, bool) {
 	return target, found
 }
 
+// GetDatabaseByDataSourceName is a method of Config struct for retreive datasource by his name
 func (config *Config) GetDatabaseByDataSourceName(dataSourceName string) (Database, bool) {
 	var (
 		database Database
