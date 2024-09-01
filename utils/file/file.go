@@ -32,17 +32,15 @@ func CreateConfigFileForTesting(configContent string) (string, error) {
 func ReadCSVInBuffer(file multipart.File, bufferSize int) ([]Buffer, error) {
 	var (
 		buffers []Buffer
-		buffer  Buffer
 	)
 
 	reader := csv.NewReader(file)
 	numLine := 0
 
 	for {
-		buffer = Buffer{
+		buffer := Buffer{
 			StartLine: bufferSize*numLine + 1,
-			EndLine:   bufferSize * (numLine + 1),
-			Lines:     make([][]string, bufferSize),
+			Lines:     make([][]string, 0, bufferSize),
 		}
 
 		for i := 0; i < bufferSize; i++ {
@@ -60,6 +58,7 @@ func ReadCSVInBuffer(file multipart.File, bufferSize int) ([]Buffer, error) {
 			break
 		}
 
+		buffer.EndLine = buffer.StartLine + len(buffer.Lines) - 1
 		buffers = append(buffers, buffer)
 		numLine++
 	}
