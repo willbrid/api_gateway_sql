@@ -85,6 +85,7 @@ func executeBatchSQLQuery(sqlitedb string, target config.Target, database config
 	return nil
 }
 
+// processBatch used to execute a batch in a buffer
 func processBatch(sqlitedb string, block *stat.Block, buffer file.Buffer, target config.Target, database config.Database) error {
 	var (
 		cnx *gorm.DB
@@ -103,19 +104,23 @@ func processBatch(sqlitedb string, block *stat.Block, buffer file.Buffer, target
 	}()
 
 	var (
-		wg      sync.WaitGroup
-		record  map[string]interface{}
-		records []map[string]interface{}
+		wg                sync.WaitGroup
+		record            map[string]interface{}
+		records           []map[string]interface{}
+		batchSize         int      = target.BatchSize
+		batchFields       []string = strings.Split(target.BatchFields, ";")
+		currentBufferSize int      = len(buffer.Lines)
+		numBatches        int      = currentBufferSize / batchSize
 	)
-	batchSize := target.BatchSize
-	batchFields := strings.Split(target.BatchFields, ";")
-	numBatches := (len(buffer.Lines) + batchSize - 1) / batchSize
+	if currentBufferSize%batchSize != 0 {
+		numBatches++
+	}
 
 	for i := 0; i < numBatches; i++ {
 		start := i * batchSize
 		end := start + batchSize
-		if end > len(buffer.Lines) {
-			end = len(buffer.Lines)
+		if end > currentBufferSize {
+			end = currentBufferSize
 		}
 
 		batch := buffer.Lines[start:end]
@@ -123,12 +128,12 @@ func processBatch(sqlitedb string, block *stat.Block, buffer file.Buffer, target
 
 		go func(batch [][]string) {
 			defer wg.Done()
-			records = make([]map[string]interface{}, len(batch))
+			records = make([]map[string]interface{}, 0, len(batch))
 
 			for _, line := range batch {
 				record, err = mapBatchFieldToValueLine(batchFields, line)
 				if err != nil {
-					logging.Log(logging.Error, "%s : %s", err.Error(), line)
+					logging.Log(logging.Error, "%s : %s : %s", err.Error(), batchFields, line)
 					break
 				} else {
 					records = append(records, record)
@@ -173,7 +178,7 @@ func mapBatchFieldToValueLine(fields []string, values []string) (map[string]inte
 		return nil, fmt.Errorf("bad mapping fields and file column")
 	}
 
-	var result map[string]interface{} = make(map[string]interface{}, len(fields))
+	var result map[string]interface{} = make(map[string]interface{}, 0)
 
 	for index, field := range fields {
 		result[field] = values[index]
