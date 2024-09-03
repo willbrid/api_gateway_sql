@@ -23,7 +23,7 @@ COPY --from=builder --chown=nobody /build/fixtures/tls/server.key /etc/api-gatew
 
 RUN apk update && apk add --no-cache ca-certificates
 
-ENV API_GATEWAY_SQL_PORT=5977
+ENV API_GATEWAY_SQL_PORT=5297
 ENV API_GATEWAY_SQL_ENABLE_HTTPS="true"
 
 USER nobody
