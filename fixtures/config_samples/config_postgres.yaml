@@ -1,5 +1,5 @@
 api_gateway_sql:
-  sqlitedb: "/tmp/api_gateway_sql"
+  sqlitedb: "api_gateway_sql"
   auth:
     enabled: true
     username: test
