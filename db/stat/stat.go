@@ -12,7 +12,7 @@ import (
 )
 
 func Connect(sqlitedb string) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s.db", sqlitedb)
+	dsn := fmt.Sprintf("/data/%s.db", sqlitedb)
 
 	return gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 }
