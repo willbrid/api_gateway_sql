@@ -1,8 +1,19 @@
 #!/bin/bash
 
+if [ -z "$1" ]; then
+  echo "Erreur: Aucun argument fourni."
+  echo "Usage: $0 <entier>"
+  exit 1
+fi
+
+if ! [[ "$1" =~ ^[1-9][0-9]*$ ]]; then
+  echo "Erreur: L'argument doit être un entier positif."
+  exit 1
+fi
+
 # Fichier de sortie
 output_file="/tmp/schools.csv"
-size=100
+size=$1
 
 # Générer des noms aléatoires
 generate_name() {
