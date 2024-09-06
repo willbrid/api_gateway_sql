@@ -1,0 +1,26 @@
+project_name: api_gateway_sql
+before:
+  hooks:
+  - go mod tidy
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "^build:"
+      - "^chore:"
+      - "^Merge"
+release:
+  prerelease: auto
+builds:
+  - env: 
+    - CGO_ENABLED=1
+    - GO111MODULE=on
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
