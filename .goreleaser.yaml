@@ -20,6 +20,5 @@ builds:
     - GO111MODULE=on
     goos:
       - linux
-      - windows
     goarch:
       - amd64
