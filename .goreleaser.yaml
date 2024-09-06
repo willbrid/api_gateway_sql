@@ -23,4 +23,3 @@ builds:
       - windows
     goarch:
       - amd64
-      - arm64
