@@ -8,7 +8,7 @@ api_gateway_sql:
   - name: school
     type: sqlite
     dbname: "/tmp/test"
-    timeout: 10s
+    timeout: 1s
   targets:
   - name: list-student
     data_source_name: school
