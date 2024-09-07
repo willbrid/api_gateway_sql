@@ -58,7 +58,7 @@ api_gateway_sql:
 ```
 
 ```
-docker run -d -p 5297:5297 --name api_gateway_sql -v $HOME/api_gateway_sql/config.yaml:/etc/api_gateway_sql/config.yaml -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
+docker run -d -p 5297:5297 --name api_gateway_sql -v $HOME/api_gateway_sql/config.yaml:/etc/api-gateway-sql/config.yaml -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
 ```
 
 Pour ouvrir le swagger via un navigateur, nous accédons à sa page via l'url ci-dessous
