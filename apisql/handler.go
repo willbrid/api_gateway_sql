@@ -166,12 +166,11 @@ func ApiPostSqlBatchHandler(resp http.ResponseWriter, req *http.Request, configL
 // @Router       /api-gateway-sql/stats [get]
 func ApiGetStatsHandler(resp http.ResponseWriter, req *http.Request, configLoaded config.Config) {
 	var (
-		queries   url.Values = req.URL.Query()
-		pageNum   int
-		pageSize  int
-		err       error
-		stats     []stat.BatchStatistic
-		jsonStats []byte
+		queries  url.Values = req.URL.Query()
+		pageNum  int
+		pageSize int
+		err      error
+		stats    []stat.BatchStatistic
 	)
 
 	pageNum, err = strconv.Atoi(queries.Get("page_num"))
@@ -193,14 +192,7 @@ func ApiGetStatsHandler(resp http.ResponseWriter, req *http.Request, configLoade
 		return
 	}
 
-	jsonStats, err = json.Marshal(stats)
-	if err != nil {
-		logging.Log(logging.Error, err.Error())
-		httputil.SendJSONResponse(resp, http.StatusInternalServerError, httputil.HTTPStatusInternalServerErrorMessage, nil)
-		return
-	}
-
-	httputil.SendJSONResponse(resp, http.StatusOK, httputil.HTTPStatusOKMessage, string(jsonStats))
+	httputil.SendJSONResponse(resp, http.StatusOK, httputil.HTTPStatusOKMessage, stats)
 }
 
 // InitializeDatabaseHandler godoc
