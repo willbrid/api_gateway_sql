@@ -16,7 +16,7 @@ const docTemplate = `{
         },
         "license": {
             "name": "MIT",
-            "url": "https://github.com/willbrid/easy_api_prom_sms_alert/blob/main/LICENSE"
+            "url": "https://github.com/willbrid/api_gateway_sql/blob/main/LICENSE"
         },
         "version": "{{.Version}}"
     },
@@ -323,7 +323,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "0.0.1",
+	Version:          "0.0.2",
 	Host:             "",
 	BasePath:         "/v1",
 	Schemes:          []string{},

@@ -9,9 +9,9 @@
         },
         "license": {
             "name": "MIT",
-            "url": "https://github.com/willbrid/easy_api_prom_sms_alert/blob/main/LICENSE"
+            "url": "https://github.com/willbrid/api_gateway_sql/blob/main/LICENSE"
         },
-        "version": "0.0.1"
+        "version": "0.0.2"
     },
     "basePath": "/v1",
     "paths": {

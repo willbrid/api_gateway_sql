@@ -17,9 +17,9 @@ info:
   description: API used for executing SQL QUERY
   license:
     name: MIT
-    url: https://github.com/willbrid/easy_api_prom_sms_alert/blob/main/LICENSE
+    url: https://github.com/willbrid/api_gateway_sql/blob/main/LICENSE
   title: API GATEWAY SQL
-  version: 0.0.1
+  version: 0.0.2
 paths:
   /api-gateway-sql/{datasource}/init:
     post:

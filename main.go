@@ -20,7 +20,7 @@ import (
 var validate *validator.Validate
 
 // @title API GATEWAY SQL
-// @version 0.0.1
+// @version 0.0.2
 // @description API used for executing SQL QUERY
 // @contact.name API Support
 // @contact.email ngaswilly77@gmail.com
