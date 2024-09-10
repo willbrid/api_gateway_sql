@@ -1,6 +1,14 @@
-## Installation et utilisation
+## Installation
 
-Ici nous installons l'application **api_gateway_sql** via docker sous une machine linux.
+Ici nous installons l'application **api_gateway_sql** sous une machine linux :
+- via **docker** : installation testée sur Ubuntu 20.04, Ubuntu 22.04
+- via **podman** : installation testée sur Rocky linux 8.9
+
+Comme préréquis, il faudrait installer le SGBD **mariadb** avec comme base de données **school** en utilisant une installation conteneurisée selon l'os utilisé. Nous pouvons consulter le lien ci-dessous :
+
+[https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md).
+
+A présent installons l'application **api_gateway_sql** en conteneur.
 
 ```
 cd $HOME && mkdir api_gateway_sql && cd api_gateway_sql
@@ -57,8 +65,16 @@ api_gateway_sql:
     sql: "insert into school (name, address) values ({{name}}, {{address}})"
 ```
 
+Sous Ubuntu
 ```
 docker run -d --network=host --name api_gateway_sql -v $HOME/api_gateway_sql/config.yaml:/etc/api-gateway-sql/config.yaml -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
+```
+
+ou
+
+Sous Rocky
+```
+podman run -d --net=host --name api_gateway_sql -v $HOME/api_gateway_sql/config.yaml:/etc/api-gateway-sql/config.yaml:z -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
 ```
 
 Pour ouvrir le swagger via un navigateur, nous accédons à sa page via l'url ci-dessous
