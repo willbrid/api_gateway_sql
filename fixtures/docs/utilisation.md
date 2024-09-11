@@ -32,7 +32,7 @@ echo -n test:test@test | base64
 
 NB : Cet api n'est pas obligatoire si nous utilisons l'application sur des bases de données existantes.
 
-### Api [GET] : /v1/api-gateway-sql/{target}
+#### Api [GET] : /v1/api-gateway-sql/{target}
 
 Cette API permet d'exécuter une requête SQL en se basant sur le nom de la cible (**target**), qui contient la configuration de la requête. Cette requête sql ne doit pas être paramétrée avec le symbole **{{}}**.
 
@@ -48,7 +48,7 @@ curl -k -v -X GET -H 'Authorization: Basic dGVzdDp0ZXN0QHRlc3Q=' -H 'accept: app
 - avec **list-student** sa requête sql sélectionne toutes les lignes de la table **student**
 - avec **list-school** sa requête sql sélectionne toutes les lignes de la table **school**
 
-### Api [POST] : /v1/api-gateway-sql/{target}
+#### Api [POST] : /v1/api-gateway-sql/{target}
 
 Cette API permet d'exécuter une requête SQL en se basant sur le nom de la cible (**target**), qui contient la configuration de la requête. Cette requête SQL doit être paramétrée à l'aide d'un ou plusieurs paramètres définis par le symbole **{{}}**. Les valeurs des paramètres doivent être transmises via une requête POST.
 
