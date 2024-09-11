@@ -4,7 +4,8 @@ Ici nous installons l'application **api_gateway_sql** sous une machine linux :
 - via **docker** : installation testée sur Ubuntu 20.04, Ubuntu 22.04
 - via **podman** : installation testée sur Rocky linux 8.9
 
-En prérequis, il est nécessaire d'installer ou d'utiliser un SGBD compatible, comme **MariaDB**, **MySQL**, **PostgreSQL**, **SqlServer** ou **Sqlite**. **MariaDB** est utilisé ici à titre d'exemple pour un environnement de test. Vous pouvez, par exemple, opter pour une installation conteneurisée en fonction de votre système d'exploitation. Le lien ci-dessous vous guidera pour mettre en place une sandbox **MariaDB** avec la base de données **school** :
+En prérequis, il est nécessaire d'installer un SGBD compatible, tel que **MariaDB**, **MySQL**, **PostgreSQL**, **SqlServer** ou **Sqlite** et de configurer une base de données; ou bien d'utiliser une base de données existante provenant d'un SGBD compatible déjà installé. **MariaDB** est utilisé ici à titre d'exemple pour un environnement de test. L'application permet aussi de configurer une ou plusieurs bases de données provenant d'un ou plusieurs SGBD compatibles différents. Lors de l'exécution, il est possible de requêter une base de données spécifique en consommant une API et en précisant une cible dans le paramètre URL. Cette cible fait référence à une configuration qui contient à la fois la référence à la base de données à interroger ainsi que la chaîne SQL à exécuter. <br>
+Vous pouvez, par exemple, opter pour une installation conteneurisée en fonction de votre système d'exploitation. Le lien ci-dessous vous guidera pour mettre en place une sandbox **MariaDB** avec la base de données **school** :
 
 [https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md).
 
