@@ -4,14 +4,14 @@ Ici nous installons l'application **api_gateway_sql** sous une machine linux :
 - via **docker** : installation testée sur Ubuntu 20.04, Ubuntu 22.04
 - via **podman** : installation testée sur Rocky linux 8.9
 
-En prérequis, il est nécessaire d'installer le SGBD **MariaDB** et de configurer une base de données. Vous pouvez, par exemple, opter pour une installation conteneurisée en fonction de votre système d'exploitation. Le lien ci-dessous vous guidera pour mettre en place un environnement de test **MariaDB** avec la base de données **school** :
+En prérequis, il est nécessaire d'installer ou d'utiliser un SGBD compatible, comme **MariaDB**, **MySQL**, **PostgreSQL**, **SqlServer** ou **Sqlite**. **MariaDB** est utilisé ici à titre d'exemple pour un environnement de test. Vous pouvez, par exemple, opter pour une installation conteneurisée en fonction de votre système d'exploitation. Le lien ci-dessous vous guidera pour mettre en place une sandbox **MariaDB** avec la base de données **school** :
 
 [https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md).
 
 A présent installons l'application **api_gateway_sql** en conteneur.
 
 ```
-cd $HOME && mkdir api_gateway_sql && cd api_gateway_sql
+mkdir $HOME/api_gateway_sql && $HOME/api_gateway_sql/data && cd $HOME/api_gateway_sql
 ```
 
 ```
@@ -65,6 +65,8 @@ api_gateway_sql:
     sql: "insert into school (name, address) values ({{name}}, {{address}})"
 ```
 
+- **Installation sans persistence des données sqlite de l'application**
+
 Sous Ubuntu
 ```
 docker run -d --network=host --name api_gateway_sql -v $HOME/api_gateway_sql/config.yaml:/etc/api-gateway-sql/config.yaml -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
@@ -77,7 +79,21 @@ Sous Rocky
 podman run -d --net=host --name api_gateway_sql -v $HOME/api_gateway_sql/config.yaml:/etc/api-gateway-sql/config.yaml:z -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
 ```
 
-Pour ouvrir le swagger via un navigateur, nous accédons à sa page via l'url ci-dessous
+- **Installation avec persistence des données sqlite de l'application**
+
+Sous Ubuntu
+```
+docker run -d --network=host --name api_gateway_sql -v $HOME/api_gateway_sql/data:/data -v $HOME/api_gateway_sql/config.yaml:/etc/api-gateway-sql/config.yaml -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
+```
+
+ou
+
+Sous Rocky
+```
+podman run -d --net=host --name api_gateway_sql -v $HOME/api_gateway_sql/data:/data:z -v $HOME/api_gateway_sql/config.yaml:/etc/api-gateway-sql/config.yaml:z -e API_GATEWAY_SQL_ENABLE_HTTPS=true willbrid/api-gateway-sql:latest
+```
+
+Une fois l'installation terminée, pour ouvrir le swagger via un navigateur, nous accédons à sa page via l'url ci-dessous
 
 ```
 https://localhost:5297/swagger/index.html
