@@ -53,11 +53,11 @@ api_gateway_sql:
     data_source_name: school
     multi: false
     sql: "select * from student where class_id = {{class}} and school_id = {{school}} and age >= {{age}}"
-  - name: insert_student
+  - name: insert_school
     data_source_name: school
     multi: false
     sql: "insert into school (id, name, address) values ({{id}}, {{name}}, {{address}})"
-  - name: insert_batch_student
+  - name: insert_batch_school
     data_source_name: school
     multi: true
     batch_size: 10
