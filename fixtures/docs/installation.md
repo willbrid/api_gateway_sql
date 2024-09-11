@@ -4,7 +4,7 @@ Ici nous installons l'application **api_gateway_sql** sous une machine linux :
 - via **docker** : installation testée sur Ubuntu 20.04, Ubuntu 22.04
 - via **podman** : installation testée sur Rocky linux 8.9
 
-Comme préréquis, il faudrait installer le SGBD **mariadb** avec comme base de données **school** en utilisant une installation conteneurisée selon l'os utilisé. Nous pouvons consulter le lien ci-dessous :
+En prérequis, il est nécessaire d'installer le SGBD **MariaDB** et de configurer une base de données. Vous pouvez, par exemple, opter pour une installation conteneurisée en fonction de votre système d'exploitation. Le lien ci-dessous vous guidera pour mettre en place un environnement de test **MariaDB** avec la base de données **school** :
 
 [https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md).
 
