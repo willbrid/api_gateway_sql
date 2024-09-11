@@ -35,8 +35,9 @@ Pour chaque exécution en masse, l'application permet d'obtenir des statistiques
 ## Documentation
 
 1- [Fichier de configuration](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/configuration.md) <br>
-2- [Installation](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/installation.md) <br>
-3- [Démarrage d'une base de données de test par SGBD](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md)
+2- [Démarrage d'une base de données de test par SGBD](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/databases.md) <br>
+3- [Installation](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/installation.md) <br>
+4- [Utilisation](https://github.com/willbrid/api_gateway_sql/blob/main/fixtures/docs/utilisation.md)
 
 ## Licence
 
