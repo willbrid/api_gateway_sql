@@ -26,7 +26,7 @@ L'application permet d'exécuter des requêtes SQL paramétrées en envoyant des
 
 - **Exécution en batch d'une requête SQL avec des valeurs issues d'un fichier CSV (POST)**
 
-L'application prend en charge l'exécution de requêtes SQL en batch (batch) en récupérant les paramètres d'un fichier CSV. Cela est utile pour automatiser le traitement d'un grand nombre de données en une seule requête.
+L'application prend en charge l'exécution de requêtes SQL en batch en récupérant les paramètres d'un fichier CSV. Cela est utile pour automatiser le traitement d'un grand nombre de données en une seule requête.
 
 - **Statistiques d'une exécution en batch (GET)**
 
