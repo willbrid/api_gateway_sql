@@ -24,13 +24,13 @@ Certaines requêtes sql peuvent être exécutées sans passer de paramètres sup
 
 L'application permet d'exécuter des requêtes SQL paramétrées en envoyant des paramètres via une requête POST. Cette fonctionnalité est idéale pour des requêtes dynamiques où les valeurs des colonnes peuvent changer à chaque exécution.
 
-- **Exécution en masse d'une requête SQL avec des valeurs issues d'un fichier CSV (POST)**
+- **Exécution en batch d'une requête SQL avec des valeurs issues d'un fichier CSV (POST)**
 
-L'application prend en charge l'exécution de requêtes SQL en masse (batch) en récupérant les paramètres d'un fichier CSV. Cela est utile pour automatiser le traitement d'un grand nombre de données en une seule requête.
+L'application prend en charge l'exécution de requêtes SQL en batch (batch) en récupérant les paramètres d'un fichier CSV. Cela est utile pour automatiser le traitement d'un grand nombre de données en une seule requête.
 
-- **Statistiques d'une exécution en masse (GET)**
+- **Statistiques d'une exécution en batch (GET)**
 
-Pour chaque exécution en masse, l'application permet d'obtenir des statistiques sur le processus, comme le nombre d'exécutions réussies et échouées, la durée totale, et d'autres métriques pertinentes.
+Pour chaque exécution en batch, l'application permet d'obtenir des statistiques sur le processus, comme le nombre d'exécutions réussies et échouées, la durée totale, et d'autres métriques pertinentes.
 
 ## Documentation
 
