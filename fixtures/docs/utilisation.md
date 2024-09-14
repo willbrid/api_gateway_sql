@@ -1,6 +1,6 @@
 ## Utilisation
 
-L'objectif de ce contenu est de fournir une présentation sur comment utiliser l'application à travers ses apis. Nous utiliserons la commande **curl** pour fournir des exemples pratiques de consommation.
+L'objectif de ce contenu est de présenter l'utilisation de l'application api_gateway_sql à travers ses API. Nous utiliserons la commande curl pour illustrer des exemples concrets de consommation de ces API.
 
 #### Api [POST] : /v1/api-gateway-sql/{datasource}/init
 
