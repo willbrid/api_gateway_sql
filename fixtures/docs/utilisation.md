@@ -1,6 +1,6 @@
 ## Utilisation
 
-L'objectif de ce contenu est de fournir une présentation sur comment utiliser l'application à travers ses apis. Nous utiliserons l'outil **postman** pour fournir des exemples pratiques de consommation.
+L'objectif de ce contenu est de fournir une présentation sur comment utiliser l'application à travers ses apis. Nous utiliserons la commande **curl** pour fournir des exemples pratiques de consommation.
 
 #### Api [POST] : /v1/api-gateway-sql/{datasource}/init
 
