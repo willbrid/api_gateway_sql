@@ -67,6 +67,7 @@ curl -k -v -X POST -H 'Authorization: Basic dGVzdDp0ZXN0QHRlc3Q=' -H 'accept: ap
 **find-one-student**, **find-student-with-cond** et **insert_school** sont les noms des cibles configurés dans la section **api_gateway_sql.targets** du fichier de configuration :
 - avec **find-one-student** sa requête sql sélectionne une ligne de la table **student** ayant la valeur du champ **id** égale à **1**
 - avec **find-student-with-cond** sa requête sql sélectionne toutes les lignes de la table **student** ayant la valeur du champ **class_id** égale à **1**, la valeur du champ **school_id** égale à **1** et la valeur du champ **age** supérieure ou égale à **15**
+- avec **insert_school** sa requête sql insère une nouvelle ligne dans la table **school** avec la valeur du champ **id** égale à **300**, la valeur du champ **name** égale à **high-tech** et la valeur du champ **address** égale à **Willow Ave**
 
 NB: Chaque nom de paramètre envoyé en post doit être identique à un nom de paramètre configuré dans la requête sql.
 
