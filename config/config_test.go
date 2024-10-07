@@ -1,6 +1,7 @@
-package config
+package config_test
 
 import (
+	"api-gateway-sql/config"
 	"api-gateway-sql/utils/file"
 
 	"fmt"
@@ -15,7 +16,7 @@ var validate *validator.Validate = validator.New(validator.WithRequiredStructEna
 func TestLoadConfigFileNotFound(t *testing.T) {
 	var filename string
 
-	_, err := LoadConfig(filename, validate)
+	_, err := config.LoadConfig(filename, validate)
 
 	expected := "Config File \"config\" Not Found in \"[]\""
 
@@ -31,7 +32,7 @@ func TestLoadConfigFileNotFound(t *testing.T) {
 func TestLoadConfigFileNotExist(t *testing.T) {
 	var filename string = "nonexistentfile.yaml"
 
-	_, err := LoadConfig(filename, validate)
+	_, err := config.LoadConfig(filename, validate)
 
 	expected := "open nonexistentfile.yaml: no such file or directory"
 
@@ -92,11 +93,11 @@ api_gateway_sql:
 		t.Run(fmt.Sprintf("LoadConfig #%v", index), func(subT *testing.T) {
 			filename, err := file.CreateConfigFileForTesting(configContent)
 			if err != nil {
-				t.Fatalf(err.Error())
+				t.Fatal(err.Error())
 			}
 			defer os.Remove(filename)
 
-			_, err = LoadConfig(filename, validate)
+			_, err = config.LoadConfig(filename, validate)
 
 			expected := expectations[index]
 
@@ -119,11 +120,11 @@ api_gateway_sql:
 
 	filename, err := file.CreateConfigFileForTesting(configContent)
 	if err != nil {
-		t.Fatalf(err.Error())
+		t.Fatal(err.Error())
 	}
 	defer os.Remove(filename)
 
-	_, err = LoadConfig(filename, validate)
+	_, err = config.LoadConfig(filename, validate)
 
 	if err == nil {
 		t.Errorf("no error returned")
@@ -361,11 +362,11 @@ api_gateway_sql:
 		t.Run(fmt.Sprintf("LoadConfig #%v", index), func(subT *testing.T) {
 			filename, err := file.CreateConfigFileForTesting(configContent)
 			if err != nil {
-				t.Fatalf(err.Error())
+				t.Fatal(err.Error())
 			}
 			defer os.Remove(filename)
 
-			_, err = LoadConfig(filename, validate)
+			_, err = config.LoadConfig(filename, validate)
 
 			expected := expectations[index]
 
@@ -541,11 +542,11 @@ api_gateway_sql:
 		t.Run(fmt.Sprintf("LoadConfig #%v", index), func(subT *testing.T) {
 			filename, err := file.CreateConfigFileForTesting(configContent)
 			if err != nil {
-				t.Fatalf(err.Error())
+				t.Fatal(err.Error())
 			}
 			defer os.Remove(filename)
 
-			_, err = LoadConfig(filename, validate)
+			_, err = config.LoadConfig(filename, validate)
 
 			expected := expectations[index]
 
