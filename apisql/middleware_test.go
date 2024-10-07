@@ -1,6 +1,7 @@
-package apisql
+package apisql_test
 
 import (
+	"api-gateway-sql/apisql"
 	"api-gateway-sql/config"
 	"api-gateway-sql/utils/file"
 
@@ -37,13 +38,13 @@ api_gateway_sql:
 func triggerTest(t *testing.T, statusCode int, credential string) {
 	filename, err := file.CreateConfigFileForTesting(configContent)
 	if err != nil {
-		t.Fatalf(err.Error())
+		t.Fatal(err.Error())
 	}
 	defer os.Remove(filename)
 
 	configLoaded, err := config.LoadConfig(filename, validate)
 	if err != nil {
-		t.Fatalf(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	req, err := http.NewRequest("GET", "/api-gateway-sql/xxxxx", nil)
@@ -59,10 +60,10 @@ func triggerTest(t *testing.T, statusCode int, credential string) {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/api-gateway-sql/{targetname}", func(w http.ResponseWriter, r *http.Request) {
-		ApiGetSqlHandler(w, r, *configLoaded)
+		apisql.ApiGetSqlHandler(w, r, *configLoaded)
 	}).Methods("GET")
 	router.Use(func(next http.Handler) http.Handler {
-		return AuthMiddleware(next, *configLoaded)
+		return apisql.AuthMiddleware(next, *configLoaded)
 	})
 	router.ServeHTTP(rr, req)
 
@@ -71,18 +72,20 @@ func triggerTest(t *testing.T, statusCode int, credential string) {
 	}
 }
 
-func TestNoAuthorizationHeaderAuthMiddleware(t *testing.T) {
-	triggerTest(t, http.StatusUnauthorized, "")
-}
+func TestAuthentication(t *testing.T) {
+	t.Run("No authorization header", func(t *testing.T) {
+		triggerTest(t, http.StatusUnauthorized, "")
+	})
 
-func TestInvalidAuthorizationHeaderAuthMiddleware(t *testing.T) {
-	triggerTest(t, http.StatusUnauthorized, "xxxxx")
-}
+	t.Run("Invalid authorization header", func(t *testing.T) {
+		triggerTest(t, http.StatusUnauthorized, "xxxxx")
+	})
 
-func TestFailedToDecodeBase64TokenAuthMiddleware(t *testing.T) {
-	triggerTest(t, http.StatusUnauthorized, "Basic xxxxx")
-}
+	t.Run("Failed to decode base64 token", func(t *testing.T) {
+		triggerTest(t, http.StatusUnauthorized, "Basic xxxxx")
+	})
 
-func TestInvalidUsernameOrPasswordAuthMiddleware(t *testing.T) {
-	triggerTest(t, http.StatusUnauthorized, "Basic eHh4eHg6eHh4")
+	t.Run("Invalid username or password", func(t *testing.T) {
+		triggerTest(t, http.StatusUnauthorized, "Basic eHh4eHg6eHh4")
+	})
 }
